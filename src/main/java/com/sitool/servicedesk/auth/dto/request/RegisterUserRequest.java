@@ -9,8 +9,8 @@ import jakarta.validation.constraints.Size;
 
 /**
  * User register DTO
- * @param firstName
- * @param lastName
+ * @param firstname
+ * @param lastname
  * @param email
  * @param password
  */
@@ -22,14 +22,14 @@ public record RegisterUserRequest(
         )
         @NotBlank(message = "{user.firstname.notBlank}")
         @Size(min = UserValidationConstants.FIRSTNAME_MIN, max = UserValidationConstants.FIRSTNAME_MAX, message="{user.firstname.length}")
-        String firstName,
+        String firstname,
         @Schema(
                 description = "New user last name",
                 example = "Serebrovskii"
         )
         @NotBlank(message = "{user.lastname.notBlank}")
         @Size(min = UserValidationConstants.LASTNAME_MIN, max = UserValidationConstants.LASTNAME_MAX, message="{user.lastname.length}")
-        String lastName,
+        String lastname,
         @Schema(
                 description = "New user email",
                 example = "vasiliy@domain.com"

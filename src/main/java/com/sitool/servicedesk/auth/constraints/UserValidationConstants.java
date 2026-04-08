@@ -26,7 +26,7 @@ public final class UserValidationConstants {
     /**
      * Email minimum length.
      */
-    public static final int EMAIL_MIN_LENGTH = 5;
+    public static final int EMAIL_MIN_LENGTH = 7;
     /**
      * Email maximum length.
      */
