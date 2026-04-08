@@ -1,6 +1,8 @@
 spring:
   application:
     name: service-desk
+  messages:
+    basename: ValidationMessages
 
   datasource:
     url: ${DB_URL}
