@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Validation tests for RegisterUserRequest
  */
-@DisplayName("RegisterUserRequest class validation tests")
+@DisplayName("RegisterUserRequest class validation tests.")
 public class RegisterUserRequestValidationTests {
 
     private static Validator validator;
