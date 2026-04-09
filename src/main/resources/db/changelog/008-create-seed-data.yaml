@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_unique_index_categories_name_ticket_type
+      author: sitool
+      changes:
+        - addUniqueConstraint:
+            tableName: categories
+            columnNames: name,ticket_type_id
+            constraintName: uq_categories_name_ticket_type
+  - changeSet:
+      id: seed_roles
+      author: sitool
+      sqlFile:
+        path: classpath:/db/seed/seed_roles.sql
+        relativeToChangelogFile: false
+
+  - changeSet:
+      id: seed_ticket_types
+      author: sitool
+      sqlFile:
+        path: classpath:/db/seed/seed_ticket_types.sql
+        relativeToChangelogFile: false
+
+  - changeSet:
+      id: seed_categories
+      author: sitool
+      sqlFile:
+        path: classpath:/db/seed/seed_categories.sql
+        relativeToChangelogFile: false

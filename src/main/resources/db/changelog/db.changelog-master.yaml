@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/006-create-categories-table.yaml
   - include:
       file: db/changelog/007-create-tickets-table.yaml
+  - include:
+      file: /db/changelog/008-create-seed-data.yaml
