@@ -1,5 +1,6 @@
 package com.sitool.servicedesk.auth.dto.request;
 
+import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

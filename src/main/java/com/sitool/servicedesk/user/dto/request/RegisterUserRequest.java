@@ -1,4 +1,4 @@
-package com.sitool.servicedesk.auth.dto.request;
+package com.sitool.servicedesk.user.dto.request;
 
 import com.sitool.servicedesk.auth.constraints.UserValidationConstants;
 import com.sitool.servicedesk.auth.validation.ValidCustomEmail;
