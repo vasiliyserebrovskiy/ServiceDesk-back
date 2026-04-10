@@ -8,8 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
-                  autoIncrement: true
+                  type: UUID
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -40,13 +39,13 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
-                  name: avatar
+                  name: avatar_url
                   type: VARCHAR(255)
                   constraints:
                     nullable: true
               - column:
                   name: role_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:

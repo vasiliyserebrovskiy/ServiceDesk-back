@@ -8,8 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
-                  autoIncrement: true
+                  type: UUID
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -35,22 +34,22 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: ticket_type_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
               - column:
                   name: requester_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
               - column:
                   name: assignee_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: true
               - column:
                   name: group_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: true
               - column:
@@ -72,7 +71,7 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: category_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:

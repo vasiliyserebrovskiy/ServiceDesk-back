@@ -3,6 +3,7 @@ package com.sitool.servicedesk.user.controller;
 import com.sitool.servicedesk.exeption.handling.responce.ValidationErrorDto;
 import com.sitool.servicedesk.exeption.handling.responce.ErrorResponseDto;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,16 +38,18 @@ public interface UserApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User registered successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RegisterUserRequest.class),
+                            schema = @Schema(implementation = RegisterUserResponse.class),
                             examples = @ExampleObject(value = """
                                     {
+                                      "id": "123e4567-e89b-12d3-a456-426614174000",
                                       "firstname": "Vasiliy",
-                                      "lastname": "tes_dev@upteams.de",
+                                      "lastname": "Serebrovskii",
                                       "email": "vasiliy@domain.com",
-                                      "password": "password"
+                                      "role": "USER"
                                     }
                                     """))
             ),
+            // TODO: here we need to describe error, when user is already exist in DB!
             @ApiResponse(responseCode = "400", description = "Invalid request payload",
                     content = @Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = ValidationErrorDto.class)),
