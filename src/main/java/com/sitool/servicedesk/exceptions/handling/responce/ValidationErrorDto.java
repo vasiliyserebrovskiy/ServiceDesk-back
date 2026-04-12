@@ -1,4 +1,4 @@
-package com.sitool.servicedesk.exeption.handling.responce;
+package com.sitool.servicedesk.exceptions.handling.responce;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

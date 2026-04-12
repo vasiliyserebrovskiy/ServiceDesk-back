@@ -1,7 +1,6 @@
 package com.sitool.servicedesk.user.controller;
 
-import com.sitool.servicedesk.exeption.handling.responce.ValidationErrorDto;
-import com.sitool.servicedesk.exeption.handling.responce.ErrorResponseDto;
+import com.sitool.servicedesk.exceptions.handling.responce.ValidationErrorDto;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
 import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,5 +62,5 @@ public interface UserApi {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
-    Map<String,String> createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest);
+    RegisterUserResponse createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest);
 }

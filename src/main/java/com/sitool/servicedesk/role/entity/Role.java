@@ -24,6 +24,9 @@ public class Role extends BaseEntity {
     @Column(name="default_role", nullable = false)
     private boolean defaultRole=false;
 
+    public String getRoleName() {
+        return name;
+    }
 
     @Override
     public String toString() {

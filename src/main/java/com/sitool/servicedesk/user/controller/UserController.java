@@ -1,24 +1,26 @@
 package com.sitool.servicedesk.user.controller;
 
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
+import com.sitool.servicedesk.user.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController implements UserApi {
 
+    private final UserService userService;
+
     @Override
-    public Map<String,String> createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
+    public RegisterUserResponse createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
         System.out.println("USER TRY TO REGISTER WITH CREDENTIALS:");
         System.out.println(registerUserRequest);
-        return Map.of("message: ","success",
-                "userFirstName: ", registerUserRequest.firstname(),
-                "userLastName: ", registerUserRequest.lastname(),
-                "userEmail: ", registerUserRequest.email(),
-                "userPassword: ", registerUserRequest.password());
+        return userService.createNewUser(registerUserRequest);
     }
 
 }
