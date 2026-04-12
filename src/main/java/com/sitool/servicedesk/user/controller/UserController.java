@@ -18,8 +18,6 @@ public class UserController implements UserApi {
 
     @Override
     public RegisterUserResponse createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
-        System.out.println("USER TRY TO REGISTER WITH CREDENTIALS:");
-        System.out.println(registerUserRequest);
         return userService.createNewUser(registerUserRequest);
     }
 

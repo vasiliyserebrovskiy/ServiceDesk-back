@@ -41,9 +41,9 @@ public class User extends BaseEntity {
     @Column(name="avatar_url")
     private String avatar_url;
 
-    public User(String lastname, String firstname, String email) {
-        this.lastname = lastname;
+    public User(String firstname, String lastname, String email) {
         this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
     }
 
