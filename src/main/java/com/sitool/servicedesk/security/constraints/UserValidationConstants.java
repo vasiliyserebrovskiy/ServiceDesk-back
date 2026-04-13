@@ -1,4 +1,4 @@
-package com.sitool.servicedesk.auth.constraints;
+package com.sitool.servicedesk.security.constraints;
 
 public final class UserValidationConstants {
     private  UserValidationConstants() {

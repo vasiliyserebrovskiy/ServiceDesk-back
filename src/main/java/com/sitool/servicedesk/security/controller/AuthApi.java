@@ -1,7 +1,6 @@
-package com.sitool.servicedesk.auth.controller;
+package com.sitool.servicedesk.security.controller;
 
-import com.sitool.servicedesk.auth.dto.request.LoginUserRequest;
-import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.security.dto.request.LoginUserRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;

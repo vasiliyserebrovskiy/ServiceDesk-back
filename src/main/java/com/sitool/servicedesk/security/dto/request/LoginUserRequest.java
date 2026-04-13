@@ -1,4 +1,4 @@
-package com.sitool.servicedesk.auth.dto.request;
+package com.sitool.servicedesk.security.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

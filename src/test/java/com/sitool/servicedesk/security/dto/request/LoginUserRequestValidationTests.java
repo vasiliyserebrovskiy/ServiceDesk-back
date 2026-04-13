@@ -1,4 +1,4 @@
-package com.sitool.servicedesk.auth.dto.request;
+package com.sitool.servicedesk.security.dto.request;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

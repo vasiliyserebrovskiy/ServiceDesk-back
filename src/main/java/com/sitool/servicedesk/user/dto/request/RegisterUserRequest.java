@@ -1,7 +1,7 @@
 package com.sitool.servicedesk.user.dto.request;
 
-import com.sitool.servicedesk.auth.constraints.UserValidationConstants;
-import com.sitool.servicedesk.auth.validation.ValidCustomEmail;
+import com.sitool.servicedesk.security.constraints.UserValidationConstants;
+import com.sitool.servicedesk.security.validation.ValidCustomEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
