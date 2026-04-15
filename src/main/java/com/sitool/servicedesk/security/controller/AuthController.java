@@ -1,6 +1,8 @@
 package com.sitool.servicedesk.security.controller;
 
 import com.sitool.servicedesk.security.dto.request.LoginUserRequest;
+import com.sitool.servicedesk.security.dto.request.RefreshTokenRequest;
+import com.sitool.servicedesk.security.dto.response.TokenResponseDto;
 import com.sitool.servicedesk.security.service.CustomUserDetailsService;
 import com.sitool.servicedesk.security.service.JwtService;
 import jakarta.validation.Valid;
@@ -24,17 +26,38 @@ public class AuthController implements AuthApi{
     private final CustomUserDetailsService userDetailsService;
 
     @Override
-    public Map<String,String> login(@Valid @RequestBody LoginUserRequest loginUserRequest) {
+    public TokenResponseDto login(@Valid @RequestBody LoginUserRequest loginUserRequest) {
 
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUserRequest.email(), loginUserRequest.password())
         );
 
-        //UserDetails user = userDetailsService.loadUserByUsername(loginUserRequest.email()); // send request to database
         UserDetails user = (UserDetails) auth.getPrincipal(); // use Authentication
 
         String token = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        return Map.of("token",token);
+        return new TokenResponseDto(token, refreshToken);
     }
+
+    @Override
+    public TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken) {
+        System.out.println("REQUEST: " + refreshToken.toString());
+        String token = refreshToken.refreshToken();
+        System.out.println("TOKEN: " + token);
+        String userName = jwtService.extractUsername(token);
+        System.out.println("UserName: " + userName);
+        UserDetails user = userDetailsService.loadUserByUsername(userName);
+
+        if (!jwtService.isTokenValid(token, user)) {
+            throw new RuntimeException("Invalid refresh token");
+        }
+
+        String newAccessToken = jwtService.generateToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
+
+        return new TokenResponseDto(newAccessToken, newRefreshToken);
+    }
+
+
 }

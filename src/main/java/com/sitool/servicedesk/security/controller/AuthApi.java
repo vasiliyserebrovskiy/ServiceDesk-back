@@ -2,6 +2,8 @@ package com.sitool.servicedesk.security.controller;
 
 import com.sitool.servicedesk.exceptions.handling.responce.ErrorResponseDto;
 import com.sitool.servicedesk.security.dto.request.LoginUserRequest;
+import com.sitool.servicedesk.security.dto.request.RefreshTokenRequest;
+import com.sitool.servicedesk.security.dto.response.TokenResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -32,7 +34,7 @@ public interface AuthApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Authorization successfully completed",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class),//TokenResponseDto.class), temporary TODO: create TokenResponseDto.class
+                            schema = @Schema(implementation = TokenResponseDto.class),
                             examples = @ExampleObject(value = """
                                     {
                                       "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXNfZGV2QHVwdGVhbXMuZGUiLCJleHAiOjE3NTA5Mzc5NTh9.0ADS106wR9fuLuAXCgzFyxDP4JaznPH7zCZgUy_11GQ",
@@ -52,10 +54,35 @@ public interface AuthApi {
                                       "message": "User not found: <user email>",
                                       "path": "/api/v1/auth/login"
                                     }
-                                    """)
+                                    """) //TODO: check the correctness of a message field!
                     )
             )
     })
     @PostMapping("/login")
-    Map<String,String> login(@Valid @RequestBody LoginUserRequest loginUserRequest);
+    TokenResponseDto login(@Valid @RequestBody LoginUserRequest loginUserRequest);
+
+
+    @Operation(summary = "Get new access token", description = "Obtain new access token using a refresh token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "New access token granted",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TokenResponseDto.class)))
+            ,
+            @ApiResponse(responseCode = "401", description = "Invalid or expired refresh token",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "timestamp": 1627660173000,
+                                      "status": 401,
+                                      "error": "Unauthorized",
+                                      "message": "Refresh token is invalid or expired",
+                                      "path": "/api/v1/auth/refresh-token"
+                                    }
+                                    """))
+            )
+    })
+    @PostMapping("/refresh-token")
+    TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken);
+
 }
