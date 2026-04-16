@@ -3,8 +3,12 @@ package com.sitool.servicedesk.security.controller;
 import com.sitool.servicedesk.security.dto.request.LoginUserRequest;
 import com.sitool.servicedesk.security.dto.request.RefreshTokenRequest;
 import com.sitool.servicedesk.security.dto.response.TokenResponseDto;
+import com.sitool.servicedesk.security.service.AuthService;
+import com.sitool.servicedesk.security.service.CookieService;
 import com.sitool.servicedesk.security.service.CustomUserDetailsService;
-import com.sitool.servicedesk.security.service.JwtService;
+import com.sitool.servicedesk.security.service.JwtTokenService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,49 +18,41 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 
 @RestController
 @RequiredArgsConstructor
 public class AuthController implements AuthApi{
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final CustomUserDetailsService userDetailsService;
+    private final AuthService authService;
+    private final CookieService cookieService;
 
     @Override
-    public TokenResponseDto login(@Valid @RequestBody LoginUserRequest loginUserRequest) {
+    public TokenResponseDto login(@Valid @RequestBody LoginUserRequest loginUserRequest, HttpServletResponse response) {
 
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginUserRequest.email(), loginUserRequest.password())
-        );
+        final TokenResponseDto tokens = authService.login(loginUserRequest);
 
-        UserDetails user = (UserDetails) auth.getPrincipal(); // use Authentication
+        final Cookie accessCookie = cookieService.generateAccessTokenCookie(tokens.accessToken());
+        final Cookie refreshCookie = cookieService.generateRefreshTokenCookie(tokens.refreshToken());
 
-        String token = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
 
-        return new TokenResponseDto(token, refreshToken);
+        return tokens;
     }
 
     @Override
-    public TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken) {
-        System.out.println("REQUEST: " + refreshToken.toString());
-        String token = refreshToken.refreshToken();
-        System.out.println("TOKEN: " + token);
-        String userName = jwtService.extractUsername(token);
-        System.out.println("UserName: " + userName);
-        UserDetails user = userDetailsService.loadUserByUsername(userName);
+    public TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken, HttpServletResponse response) {
 
-        if (!jwtService.isTokenValid(token, user)) {
-            throw new RuntimeException("Invalid refresh token");
-        }
+        final TokenResponseDto newAccessTokens = authService.refreshAccessToken(refreshToken.refreshToken());
 
-        String newAccessToken = jwtService.generateToken(user);
-        String newRefreshToken = jwtService.generateRefreshToken(user);
+        final Cookie accessCookie = cookieService.generateAccessTokenCookie(newAccessTokens.accessToken());
+        final Cookie refreshCookie = cookieService.generateRefreshTokenCookie(newAccessTokens.refreshToken());
 
-        return new TokenResponseDto(newAccessToken, newRefreshToken);
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        return new TokenResponseDto(newAccessTokens.accessToken(), newAccessTokens.refreshToken());
+
     }
 
 

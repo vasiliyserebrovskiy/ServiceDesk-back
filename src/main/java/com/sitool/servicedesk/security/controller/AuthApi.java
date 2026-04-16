@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +60,7 @@ public interface AuthApi {
             )
     })
     @PostMapping("/login")
-    TokenResponseDto login(@Valid @RequestBody LoginUserRequest loginUserRequest);
+    TokenResponseDto login(@Valid @RequestBody LoginUserRequest loginUserRequest, HttpServletResponse response);
 
 
     @Operation(summary = "Get new access token", description = "Obtain new access token using a refresh token")
@@ -83,6 +84,6 @@ public interface AuthApi {
             )
     })
     @PostMapping("/refresh-token")
-    TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken);
+    TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken, HttpServletResponse response);
 
 }
