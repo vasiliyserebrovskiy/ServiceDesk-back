@@ -5,18 +5,14 @@ import com.sitool.servicedesk.security.dto.request.RefreshTokenRequest;
 import com.sitool.servicedesk.security.dto.response.TokenResponseDto;
 import com.sitool.servicedesk.security.service.AuthService;
 import com.sitool.servicedesk.security.service.CookieService;
-import com.sitool.servicedesk.security.service.CustomUserDetailsService;
-import com.sitool.servicedesk.security.service.JwtTokenService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.sitool.servicedesk.security.constants.Constants.ACCESS_TOKEN_COOKIE;
+import static com.sitool.servicedesk.security.constants.Constants.REFRESH_TOKEN_COOKIE;
 
 
 @RestController
@@ -27,7 +23,7 @@ public class AuthController implements AuthApi{
     private final CookieService cookieService;
 
     @Override
-    public TokenResponseDto login(@Valid @RequestBody LoginUserRequest loginUserRequest, HttpServletResponse response) {
+    public TokenResponseDto login(LoginUserRequest loginUserRequest, HttpServletResponse response) {
 
         final TokenResponseDto tokens = authService.login(loginUserRequest);
 
@@ -41,7 +37,7 @@ public class AuthController implements AuthApi{
     }
 
     @Override
-    public TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken, HttpServletResponse response) {
+    public TokenResponseDto refresh(RefreshTokenRequest refreshToken, HttpServletResponse response) {
 
         final TokenResponseDto newAccessTokens = authService.refreshAccessToken(refreshToken.refreshToken());
 
@@ -53,6 +49,18 @@ public class AuthController implements AuthApi{
 
         return new TokenResponseDto(newAccessTokens.accessToken(), newAccessTokens.refreshToken());
 
+    }
+
+    @Override
+    public TokenResponseDto logout(HttpServletResponse response) {
+        final Cookie accessCookie = cookieService.generateLogoutCookie(ACCESS_TOKEN_COOKIE);
+        final Cookie refreshCookie = cookieService.generateLogoutCookie(REFRESH_TOKEN_COOKIE);
+        SecurityContextHolder.clearContext();
+
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        return new TokenResponseDto(null, null);
     }
 
 

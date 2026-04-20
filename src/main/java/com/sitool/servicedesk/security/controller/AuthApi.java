@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Map;
 
 /**
  * Controller responsible for authentication-related endpoints.
- *
+ * <p>
  * Endpoints:
  * <ul>
  *   <li>POST /auth/login - login()</li>
@@ -52,7 +51,7 @@ public interface AuthApi {
                                       "timestamp": "2025-06-26T13:41:32.3327347",
                                       "status": 401,
                                       "error": "Unauthorized",
-                                      "message": "User not found: <user email>",
+                                      "message": "Invalid username or password.",
                                       "path": "/api/v1/auth/login"
                                     }
                                     """) //TODO: check the correctness of a message field!
@@ -77,7 +76,7 @@ public interface AuthApi {
                                       "timestamp": 1627660173000,
                                       "status": 401,
                                       "error": "Unauthorized",
-                                      "message": "Refresh token is invalid or expired",
+                                      "message": "Invalid refresh token",
                                       "path": "/api/v1/auth/refresh-token"
                                     }
                                     """))
@@ -85,5 +84,21 @@ public interface AuthApi {
     })
     @PostMapping("/refresh-token")
     TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken, HttpServletResponse response);
+
+    @Operation(summary = "Logout", description = "User logout")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logout successful",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TokenResponseDto.class),
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "accessToken": null,
+                                      "refreshToken": null
+                                    }
+                                    """)))
+    })
+    @PostMapping("/logout")
+    TokenResponseDto logout(HttpServletResponse response);
+
 
 }
