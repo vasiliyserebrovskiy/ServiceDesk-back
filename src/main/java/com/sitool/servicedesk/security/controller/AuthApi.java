@@ -1,6 +1,6 @@
 package com.sitool.servicedesk.security.controller;
 
-import com.sitool.servicedesk.exceptions.handling.responce.ErrorResponseDto;
+import com.sitool.servicedesk.exceptions.handling.response.ErrorResponseDto;
 import com.sitool.servicedesk.security.dto.request.LoginUserRequest;
 import com.sitool.servicedesk.security.dto.request.RefreshTokenRequest;
 import com.sitool.servicedesk.security.dto.response.TokenResponseDto;

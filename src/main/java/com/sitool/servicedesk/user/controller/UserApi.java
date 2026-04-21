@@ -1,6 +1,6 @@
 package com.sitool.servicedesk.user.controller;
 
-import com.sitool.servicedesk.exceptions.handling.responce.ValidationErrorDto;
+import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
 import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.Map;
 
 /**
  * Controller responsible for users-related endpoints.
