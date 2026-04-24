@@ -1,5 +1,6 @@
 package com.sitool.servicedesk.security.service;
 
+import com.sitool.servicedesk.token.dto.RefreshTokenDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -78,14 +79,16 @@ public class JwtTokenService {
     /**
      * Generate refresh token with username only.
      */
-    public String generateRefreshToken(String userEmail) {
+    public RefreshTokenDTO generateRefreshToken(String userEmail) {
         Instant now = Instant.now();
         Instant expiry = now.plusSeconds(refreshTokenLiveInMinutes * 60L);
-        return Jwts.builder()
+        String refreshToken = Jwts.builder()
                 .setSubject(userEmail)
                 .setExpiration(Date.from(expiry))
                 .signWith(refreshTokenKey, SignatureAlgorithm.HS256)
                 .compact();
+
+        return new RefreshTokenDTO(refreshToken, now, expiry);
     }
 
     /**
