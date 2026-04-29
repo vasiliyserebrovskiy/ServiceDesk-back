@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,7 +61,7 @@ public interface AuthApi {
             )
     })
     @PostMapping("/login")
-    TokenResponseDto login(@Valid @RequestBody LoginUserRequest loginUserRequest, HttpServletResponse response);
+    ResponseEntity<Void> login(@Valid @RequestBody LoginUserRequest loginUserRequest, HttpServletResponse response);
 
 
     @Operation(summary = "Get new access token", description = "Obtain new access token using a refresh token")
@@ -84,7 +85,7 @@ public interface AuthApi {
             )
     })
     @PostMapping("/refresh-token")
-    TokenResponseDto refresh(@RequestBody RefreshTokenRequest refreshToken, HttpServletResponse response);
+    ResponseEntity<Void> refresh(HttpServletRequest request, HttpServletResponse response);
 
     @Operation(summary = "Logout", description = "User logout")
     @ApiResponses(value = {
@@ -99,7 +100,7 @@ public interface AuthApi {
                                     """)))
     })
     @PostMapping("/logout")
-    TokenResponseDto logout(HttpServletRequest request, HttpServletResponse response);
+    ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response);
 
 
 }

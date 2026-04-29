@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,20 @@ public class AuthController implements AuthApi{
     private final RefreshTokenService refreshTokenService;
 
     @Override
+    public ResponseEntity<Void> login(LoginUserRequest loginUserRequest, HttpServletResponse response) {
+
+        final TokenResponseDto tokens = authService.login(loginUserRequest);
+
+        final Cookie accessCookie = cookieService.generateAccessTokenCookie(tokens.accessToken());
+        final Cookie refreshCookie = cookieService.generateRefreshTokenCookie(tokens.refreshToken());
+
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        return ResponseEntity.ok().build();
+    }
+    /*
+    @Override
     public TokenResponseDto login(LoginUserRequest loginUserRequest, HttpServletResponse response) {
 
         final TokenResponseDto tokens = authService.login(loginUserRequest);
@@ -40,7 +55,25 @@ public class AuthController implements AuthApi{
 
         return tokens;
     }
+     */
 
+    @Override
+    public ResponseEntity<Void> refresh(HttpServletRequest request, HttpServletResponse response) {
+
+        String refreshToken = cookieService.extractRefreshToken(request);
+
+        final TokenResponseDto newAccessTokens = authService.refreshAccessToken(refreshToken);
+
+        final Cookie accessCookie = cookieService.generateAccessTokenCookie(newAccessTokens.accessToken());
+        final Cookie refreshCookie = cookieService.generateRefreshTokenCookie(newAccessTokens.refreshToken());
+
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        return ResponseEntity.ok().build();
+
+    }
+    /*
     @Override
     public TokenResponseDto refresh(RefreshTokenRequest refreshToken, HttpServletResponse response) {
 
@@ -55,7 +88,28 @@ public class AuthController implements AuthApi{
         return new TokenResponseDto(newAccessTokens.accessToken(), newAccessTokens.refreshToken());
 
     }
+     */
 
+    @Override
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+
+        String refreshToken = cookieService.extractRefreshToken(request);
+
+        if (refreshToken != null) {
+            refreshTokenService.logout(refreshToken);
+        }
+
+        final Cookie accessCookie = cookieService.generateLogoutCookie(ACCESS_TOKEN_COOKIE);
+        final Cookie refreshCookie = cookieService.generateLogoutCookie(REFRESH_TOKEN_COOKIE);
+        SecurityContextHolder.clearContext();
+
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        return ResponseEntity.ok().build();
+    }
+
+    /*
     @Override
     public TokenResponseDto logout(HttpServletRequest request, HttpServletResponse response) {
 
@@ -74,6 +128,7 @@ public class AuthController implements AuthApi{
 
         return new TokenResponseDto(null, null);
     }
+     */
 
 
 }
