@@ -3,6 +3,7 @@ package com.sitool.servicedesk.user.controller;
 import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
 import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
+import com.sitool.servicedesk.user.dto.response.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,10 +14,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller responsible for users-related endpoints.
@@ -61,4 +60,7 @@ public interface UserApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     RegisterUserResponse createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest);
+
+    @GetMapping("/me")
+    UserDto getUser(Authentication authentication);
 }
