@@ -19,7 +19,20 @@ import java.util.Arrays;
 import static com.sitool.servicedesk.security.constants.Constants.ACCESS_TOKEN_COOKIE;
 import static com.sitool.servicedesk.security.constants.Constants.REFRESH_TOKEN_COOKIE;
 
-
+/**
+ * Implementation of authentication API.
+ *
+ * <p>This controller handles authentication flow using JWT stored in HttpOnly cookies.</p>
+ *
+ * <p>Responsibilities:
+ * <ul>
+ *     <li>Delegates authentication logic to AuthService</li>
+ *     <li>Manages access and refresh tokens via cookies</li>
+ *     <li>Handles logout by invalidating refresh token and clearing SecurityContext</li>
+ * </ul>
+ *
+ * <p>All endpoints are stateless and rely on cookies instead of request bodies for token transport.</p>
+ */
 @RestController
 @RequiredArgsConstructor
 public class AuthController implements AuthApi{
@@ -28,6 +41,9 @@ public class AuthController implements AuthApi{
     private final CookieService cookieService;
     private final RefreshTokenService refreshTokenService;
 
+    /**
+     * Authenticates user and sets JWT tokens as HttpOnly cookies.
+     */
     @Override
     public ResponseEntity<Void> login(LoginUserRequest loginUserRequest, HttpServletResponse response) {
 
@@ -42,6 +58,9 @@ public class AuthController implements AuthApi{
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Issues new access and refresh tokens based on refresh token from cookie.
+     */
     @Override
     public ResponseEntity<Void> refresh(HttpServletRequest request, HttpServletResponse response) {
 
@@ -59,6 +78,9 @@ public class AuthController implements AuthApi{
 
     }
 
+    /**
+     * Invalidates refresh token, clears authentication cookies and SecurityContext.
+     */
     @Override
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
 

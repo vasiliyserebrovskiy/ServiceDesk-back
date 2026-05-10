@@ -1,9 +1,15 @@
 package com.sitool.servicedesk.security.constraints;
 
+/**
+ * Centralized constants for user input validation rules.
+ *
+ * <p>Used across services and validation layers to ensure consistent
+ * validation logic for user-related fields such as name, email, and password.</p>
+ *
+ * <p>This class is immutable and not intended for instantiation.</p>
+ */
 public final class UserValidationConstants {
-    private  UserValidationConstants() {
-        throw new IllegalStateException("Utility class");
-    }
+    private  UserValidationConstants() {}
 
     /**
      * User firstname minimum length.

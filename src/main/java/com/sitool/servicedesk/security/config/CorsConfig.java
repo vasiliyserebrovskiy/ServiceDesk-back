@@ -5,6 +5,15 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * CORS configuration for the application.
+ *
+ * <p>Allows cross-origin requests from the frontend application
+ * running on http://localhost:5173 (e.g. React/Vite dev server).</p>
+ *
+ * <p>Configures allowed HTTP methods, headers, and enables credentials
+ * support (cookies / authorization headers).</p>
+ */
 @Configuration
 public class CorsConfig {
 

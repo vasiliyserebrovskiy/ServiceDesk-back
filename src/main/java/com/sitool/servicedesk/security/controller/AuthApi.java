@@ -21,42 +21,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 /**
- * Controller responsible for authentication-related endpoints.
- * <p>
- * Endpoints:
+ * Authentication controller defining endpoints for user authentication flow.
+ *
+ * <p>This API uses JWT stored in HttpOnly cookies instead of response body.
+ * Tokens are set and managed by the server via HttpServletResponse.</p>
+ *
+ * <p>Authentication flow includes:
  * <ul>
- *   <li>POST /auth/login - login()</li>
+ *   <li>Login - issues access and refresh tokens as cookies</li>
+ *   <li>Refresh token - issues new access token using refresh cookie</li>
+ *   <li>Logout - clears authentication cookies</li>
  * </ul>
  */
 @Tag(name = "Authorization controller", description = "Controller for User authorization")
 @RequestMapping("/api/v1/auth")
 public interface AuthApi {
 
-    @Operation(summary = "Login", description = "User login process")
+    @Operation(
+            summary = "User login",
+            description = "Authenticates user and sets JWT tokens in HttpOnly cookies"
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Authorization successfully completed",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TokenResponseDto.class),
-                            examples = @ExampleObject(value = """
-                                    {
-                                      "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXNfZGV2QHVwdGVhbXMuZGUiLCJleHAiOjE3NTA5Mzc5NTh9.0ADS106wR9fuLuAXCgzFyxDP4JaznPH7zCZgUy_11GQ",
-                                      "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXNfZGV2QHVwdGVhbXMuZGUiLCJleHAiOjE3NTEwMjM3NDd9.joEW3Hv8E63cWYf2w-bHr7pQEgUycYpWEF-Hq0r8Yrs"
-                                    }
-                                    """)
-                    )
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Login successful. Access and refresh tokens are stored in HttpOnly cookies.",
+                    content = @Content
             ),
-            @ApiResponse(responseCode = "401", description = "Incorrect credentials, unconfirmed registration user deactivated",
-                    content = @Content(mediaType = "application/json",
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Invalid credentials",
+                    content = @Content(
+                            mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class),
                             examples = @ExampleObject(value = """
-                                    {
-                                      "timestamp": "2025-06-26T13:41:32.3327347",
-                                      "status": 401,
-                                      "error": "Unauthorized",
-                                      "message": "Invalid username or password.",
-                                      "path": "/api/v1/auth/login"
-                                    }
-                                    """) //TODO: check the correctness of a message field!
+                        {
+                          "timestamp": "2025-06-26T13:41:32.3327347",
+                          "status": 401,
+                          "error": "Unauthorized",
+                          "message": "Invalid username or password.",
+                          "path": "/api/v1/auth/login"
+                        }
+                        """)
                     )
             )
     })
@@ -64,40 +69,38 @@ public interface AuthApi {
     ResponseEntity<Void> login(@Valid @RequestBody LoginUserRequest loginUserRequest, HttpServletResponse response);
 
 
-    @Operation(summary = "Get new access token", description = "Obtain new access token using a refresh token")
+    @Operation(
+            summary = "Refresh access token",
+            description = "Generates a new access token using refresh token from HttpOnly cookie"
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "New access token granted",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TokenResponseDto.class)))
-            ,
-            @ApiResponse(responseCode = "401", description = "Invalid or expired refresh token",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class),
-                            examples = @ExampleObject(value = """
-                                    {
-                                      "timestamp": 1627660173000,
-                                      "status": 401,
-                                      "error": "Unauthorized",
-                                      "message": "Invalid refresh token",
-                                      "path": "/api/v1/auth/refresh-token"
-                                    }
-                                    """))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Access token successfully refreshed. Token is stored in HttpOnly cookie.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Invalid or expired refresh token",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     })
     @PostMapping("/refresh-token")
     ResponseEntity<Void> refresh(HttpServletRequest request, HttpServletResponse response);
 
-    @Operation(summary = "Logout", description = "User logout")
+    @Operation(
+            summary = "User logout",
+            description = "Clears authentication cookies (access and refresh tokens)"
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Logout successful",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TokenResponseDto.class),
-                            examples = @ExampleObject(value = """
-                                    {
-                                      "accessToken": null,
-                                      "refreshToken": null
-                                    }
-                                    """)))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Logout successful. Authentication cookies cleared.",
+                    content = @Content
+            )
     })
     @PostMapping("/logout")
     ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response);

@@ -5,3 +5,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+  jwt:
+    at:
+      live-in-min: 15
