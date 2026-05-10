@@ -7,9 +7,16 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Repository for managing {@link Role} entities.
+ */
 @Repository
 public interface RoleRepository extends JpaRepository<Role, UUID> {
-
+    /**
+     * Finds the default system role.
+     *
+     * @return optional containing the default role if present
+     */
     Optional<Role> findByDefaultRoleTrue();
 
 }
