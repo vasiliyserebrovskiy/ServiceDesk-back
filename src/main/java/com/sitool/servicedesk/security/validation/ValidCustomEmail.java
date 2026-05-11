@@ -5,6 +5,12 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
+/**
+ * Custom email validation annotation.
+ *
+ * <p>Uses {@link CustomEmailValidator} to validate email format
+ * and additionally rejects emails containing consecutive dots.</p>
+ */
 @Documented
 @Constraint(validatedBy = CustomEmailValidator.class)
 @Target({ ElementType.FIELD, ElementType.PARAMETER })
