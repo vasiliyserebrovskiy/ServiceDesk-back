@@ -2,8 +2,6 @@ package com.sitool.servicedesk.security.controller;
 
 import com.sitool.servicedesk.exceptions.handling.response.ErrorResponseDto;
 import com.sitool.servicedesk.security.dto.request.LoginUserRequest;
-import com.sitool.servicedesk.security.dto.request.RefreshTokenRequest;
-import com.sitool.servicedesk.security.dto.response.TokenResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

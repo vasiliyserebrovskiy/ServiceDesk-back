@@ -23,6 +23,17 @@ import java.io.IOException;
 
 import static com.sitool.servicedesk.security.constants.Constants.ACCESS_TOKEN_COOKIE;
 
+/**
+ * JWT authentication filter responsible for:
+ * <ul>
+ *     <li>extracting access token from cookies or Authorization header</li>
+ *     <li>validating JWT token</li>
+ *     <li>loading authenticated user details</li>
+ *     <li>storing authentication in SecurityContext</li>
+ * </ul>
+ *
+ * <p>The filter processes only access tokens.</p>
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -30,6 +41,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenService jwtTokenService;
 
+    // Clear security context and stop filter chain
+    // if access token is expired.
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -64,7 +77,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Extracts JWT token from Authorization header or cookie.
+     * Resolves access token from:
+     * <ul>
+     *     <li>HTTP cookie</li>
+     *     <li>Authorization Bearer header</li>
+     * </ul>
+     *
+     * @return JWT access token or {@code null} if token is not present
      */
     private String resolveToken(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, ACCESS_TOKEN_COOKIE);

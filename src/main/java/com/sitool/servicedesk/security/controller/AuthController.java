@@ -1,7 +1,6 @@
 package com.sitool.servicedesk.security.controller;
 
 import com.sitool.servicedesk.security.dto.request.LoginUserRequest;
-import com.sitool.servicedesk.security.dto.request.RefreshTokenRequest;
 import com.sitool.servicedesk.security.dto.response.TokenResponseDto;
 import com.sitool.servicedesk.security.service.AuthService;
 import com.sitool.servicedesk.security.service.CookieService;

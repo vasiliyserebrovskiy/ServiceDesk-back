@@ -13,8 +13,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 
-
-
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
@@ -28,7 +26,7 @@ public class RefreshTokenService {
 
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUserId(userId);
-        refreshToken.setTokenHash(TokenHasher.generateRefreshTokenHash(token)); //need to made a hash of a token
+        refreshToken.setTokenHash(TokenHasher.generateRefreshTokenHash(token)); //need to make a hash of a token
         refreshToken.setCreatedAt(createdAt);
         refreshToken.setExpiresAt(expiresAt);
         refreshToken.setRevoked(false);

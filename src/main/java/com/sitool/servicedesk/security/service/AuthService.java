@@ -21,6 +21,19 @@ import org.springframework.security.authentication.LockedException;
 
 import java.util.UUID;
 
+/**
+ * Service responsible for user authentication
+ * and JWT token lifecycle management.
+ *
+ * <p>Handles:
+ * <ul>
+ *     <li>User authentication</li>
+ *     <li>Access token generation</li>
+ *     <li>Refresh token rotation</li>
+ *     <li>Refresh token persistence</li>
+ * </ul>
+ * </p>
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -30,6 +43,18 @@ public class AuthService {
     private final RefreshTokenService  refreshTokenService;
     private final UserRepository userRepository;
 
+    /**
+     * Authenticates user credentials and generates a new pair
+     * of access and refresh tokens.
+     *
+     * <p>Refresh token is persisted in database for future validation
+     * and token rotation.</p>
+     *
+     * @param loginRequest user login credentials
+     * @return generated access and refresh tokens
+     * @throws RestApiException if account is disabled, locked,
+     *                          or credentials are invalid
+     */
     public TokenResponseDto login(LoginUserRequest loginRequest) {
         Authentication authentication;
 
@@ -76,6 +101,19 @@ public class AuthService {
 
     }
 
+    /**
+     * Validates refresh token, revokes the old token,
+     * and issues a new access/refresh token pair.
+     *
+     * <p>Implements refresh token rotation strategy:
+     * old refresh token becomes invalid immediately
+     * after successful refresh.</p>
+     *
+     * @param refreshToken refresh token received from client
+     * @return newly generated access and refresh tokens
+     * @throws RestApiException if token is invalid
+     *                          or related user does not exist
+     */
     @Transactional
     public TokenResponseDto refreshAccessToken(String refreshToken) {
 
