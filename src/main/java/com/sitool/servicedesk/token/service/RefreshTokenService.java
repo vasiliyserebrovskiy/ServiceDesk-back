@@ -5,7 +5,6 @@ import com.sitool.servicedesk.token.entity.RefreshToken;
 import com.sitool.servicedesk.token.repository.RefreshTokenRepository;
 import com.sitool.servicedesk.token.utils.TokenHasher;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +16,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
-    @Value("${jwt.rt.live-in-min}")
-    private int refreshTokenLiveInMinutes;
-
     private final RefreshTokenRepository refreshTokenRepository;
 
+    /**
+     * Persists refresh token in database in hashed form.
+     *
+     * We do NOT store raw JWT refresh token for security reasons.
+     * Instead, we store only its hash.
+     */
     public void saveRefreshToken(UUID userId, String token, Instant createdAt, Instant expiresAt) {
 
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUserId(userId);
-        refreshToken.setTokenHash(TokenHasher.generateRefreshTokenHash(token)); //need to make a hash of a token
+
+        // Security: store only hashed token, not raw JWT
+        refreshToken.setTokenHash(TokenHasher.generateRefreshTokenHash(token));
         refreshToken.setCreatedAt(createdAt);
         refreshToken.setExpiresAt(expiresAt);
         refreshToken.setRevoked(false);
@@ -34,6 +38,14 @@ public class RefreshTokenService {
         refreshTokenRepository.save(refreshToken);
     }
 
+    /**
+     * Validates refresh token:
+     * - checks existence in DB
+     * - checks revocation status
+     * - checks expiration
+     *
+     * @throws RestApiException if token is invalid, expired or revoked
+     */
     public RefreshToken validateRefreshToken(String token) {
         String hashToken = TokenHasher.generateRefreshTokenHash(token);
 
@@ -52,11 +64,18 @@ public class RefreshTokenService {
         return stored;
     }
 
+    /**
+     * Marks refresh token as revoked in memory.
+     * Caller is responsible for persisting the change if needed.
+     */
     public void revokeRefreshToken(RefreshToken stored) {
         stored.setRevoked(true);
-        //refreshTokenRepository.save(stored);
+        // intentionally not saving here (controlled by caller transaction)
     }
 
+    /**
+     * Logs out user by revoking refresh token in DB.
+     */
     public void logout(String refreshToken) {
 
         String hash = TokenHasher.generateRefreshTokenHash(refreshToken);

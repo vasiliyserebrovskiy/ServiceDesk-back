@@ -11,6 +11,14 @@ import lombok.Setter;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Entity representing refresh token stored in database.
+ *
+ * Used for:
+ * - JWT refresh token rotation
+ * - Session tracking per user/device
+ * - Token revocation support
+ */
 @Entity
 @Getter
 @Setter
@@ -19,22 +27,22 @@ import java.util.UUID;
 public class RefreshToken extends BaseEntity {
 
     @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    private UUID userId; // owner of refresh token
 
     @Column(name = "token_hash", nullable = false, unique = true, length = 255)
-    private String tokenHash;
+    private String tokenHash; // hashed refresh token (not raw JWT)
 
     @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    private Instant createdAt; // token creation time
 
     @Column(name = "expires_at", nullable = false)
-    private Instant expiresAt;
+    private Instant expiresAt; // token expiration time
 
     @Column(name = "revoked", nullable = false)
-    private boolean revoked = false;
+    private boolean revoked = false; // token invalidation flag
 
     @Column(name = "device_info")
-    private String deviceInfo;
+    private String deviceInfo; // optional device metadata. Not used for now.
 
 
     @Override
