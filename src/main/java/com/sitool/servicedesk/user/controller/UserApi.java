@@ -18,14 +18,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Controller responsible for users-related endpoints.
- *
- * Endpoints:
+ * REST API for user management operations.
+ * <p>
+ * Provides endpoints for:
  * <ul>
- *   <li>POST /users/register - createNewUser()</li>
+ *     <li>User registration</li>
+ *     <li>Retrieving current authenticated user information</li>
  * </ul>
  */
-
 @Tag(name = "User controller", description = "Controller for User operations")
 @RequestMapping("/api/v1/users")
 public interface UserApi {
@@ -45,7 +45,10 @@ public interface UserApi {
                                     }
                                     """))
             ),
-            // TODO: here we need to describe error, when user is already exist in DB!
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "User already exists"
+            ),
             @ApiResponse(responseCode = "400", description = "Invalid request payload",
                     content = @Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = ValidationErrorDto.class)),
@@ -61,6 +64,24 @@ public interface UserApi {
     @PostMapping("/register")
     RegisterUserResponse createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest);
 
+    @Operation(
+            summary = "Get current user",
+            description = "Returns information about authenticated user."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User info retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = UserDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized"
+            )
+    })
     @GetMapping("/me")
     UserDto getUser(Authentication authentication);
 }

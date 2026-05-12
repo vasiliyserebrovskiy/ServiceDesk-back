@@ -1,4 +1,5 @@
-package com.sitool.servicedesk.security.validation;
+package com.sitool.servicedesk.user.validation;
+import com.sitool.servicedesk.user.validation.CustomEmailValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.sitool.servicedesk.security.constraints;
+package com.sitool.servicedesk.user.constraints;
 
 /**
  * Centralized constants for user input validation rules.

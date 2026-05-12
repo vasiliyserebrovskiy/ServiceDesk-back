@@ -7,11 +7,17 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Repository for managing {@link User} entities.
+ *
+ * <p>Provides basic CRUD operations via {@link JpaRepository}
+ * and additional query methods for user lookup and validation.</p>
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByEmail(String email);
 
     Optional<User> findByEmailIgnoreCase(String email);
-    User findByEmail(String email);
+    User findByEmail(String email); //TODO: need to be optional
 }

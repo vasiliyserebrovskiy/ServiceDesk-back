@@ -1,6 +1,6 @@
-package com.sitool.servicedesk.security.validation;
+package com.sitool.servicedesk.user.validation;
 
-import com.sitool.servicedesk.security.constraints.UserValidationConstants;
+import com.sitool.servicedesk.user.constraints.UserValidationConstants;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

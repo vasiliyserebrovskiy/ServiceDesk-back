@@ -67,7 +67,7 @@ public class UserServiceImplTests {
 
         RegisterUserResponse response = userService.createNewUser(request);
 
-        assertEquals(id.toString(), response.id());
+        assertEquals(id, response.id());
         assertEquals("John", response.firstname());
         assertEquals("Doe", response.lastname());
         assertEquals("test@mail.com", response.email());

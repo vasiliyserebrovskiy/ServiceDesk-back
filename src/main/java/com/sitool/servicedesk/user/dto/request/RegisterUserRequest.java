@@ -1,18 +1,15 @@
 package com.sitool.servicedesk.user.dto.request;
 
-import com.sitool.servicedesk.security.constraints.UserValidationConstants;
-import com.sitool.servicedesk.security.validation.ValidCustomEmail;
+import com.sitool.servicedesk.user.constraints.UserValidationConstants;
+import com.sitool.servicedesk.user.validation.ValidCustomEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
- * User register DTO
- * @param firstname
- * @param lastname
- * @param email
- * @param password
+ * Request DTO for registering a new user in the system.
+ * Contains basic identity data and credentials.
  */
 @Schema(description = "Data Transfer Object for register new user entity")
 public record RegisterUserRequest(

@@ -10,6 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST controller implementation for user operations.
+ */
 @RestController
 @RequiredArgsConstructor
 public class UserController implements UserApi {

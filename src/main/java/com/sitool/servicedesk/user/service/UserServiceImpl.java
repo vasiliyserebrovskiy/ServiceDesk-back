@@ -31,11 +31,11 @@ public class UserServiceImpl implements UserService {
     public RegisterUserResponse createNewUser(RegisterUserRequest registerUserRequest) {
 
         final String normalizedEmail = registerUserRequest.email().toLowerCase().trim();
+        boolean userExist = userRepository.existsByEmail(normalizedEmail);
+        if (userExist) throw new UserAlreadyExistException();
+
         final String encodedPassword = passwordEncoder.encode(registerUserRequest.password());
 
-        boolean userExist = userRepository.existsByEmail(normalizedEmail);
-
-        if (userExist) throw new UserAlreadyExistException();
 
         User newUser = new User(registerUserRequest.firstname(), registerUserRequest.lastname(), normalizedEmail);
         Role role = roleRepository.findByDefaultRoleTrue()
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(newUser);
 
         return new RegisterUserResponse(
-                newUser.getId().toString(),
+                newUser.getId(),
                 newUser.getFirstname(),
                 newUser.getLastname(),
                 newUser.getEmail(),
@@ -60,12 +60,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(Authentication authentication) {
         String email = authentication.getName();
 
-        System.out.println("USER EMAIL: " + email);
-
         User currentUser = userRepository.findByEmail(email);
 
         Role userRole = currentUser.getRole();
-        System.out.println("USER ROLE: " + userRole.getName());
 
         //TODO: We need to change return! This method is temporary!
 
@@ -75,7 +72,7 @@ public class UserServiceImpl implements UserService {
                 currentUser.getLastname(),
                 currentUser.getEmail(),
                 currentUser.getDescription(),
-                currentUser.getAvatar_url(),
+                currentUser.getAvatarUrl(),
                 userRole.getName());
     }
 }

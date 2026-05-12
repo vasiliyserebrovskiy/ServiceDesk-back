@@ -1,4 +1,4 @@
-package com.sitool.servicedesk.security.validation;
+package com.sitool.servicedesk.user.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
