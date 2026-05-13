@@ -1,11 +1,11 @@
 databaseChangeLog:
   - changeSet:
-      id: create-users-table
+      id: create-user-profiles-table
       author: sitool
 
       changes:
         - createTable:
-            tableName: users
+            tableName: user_profiles
             columns:
 
               - column:
@@ -16,37 +16,31 @@ databaseChangeLog:
                     nullable: false
 
               - column:
-                  name: email
-                  type: VARCHAR(255)
+                  name: user_id
+                  type: UUID
                   constraints:
                     nullable: false
                     unique: true
 
               - column:
-                  name: password
+                  name: firstname
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: lastname
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: TEXT
+
+              - column:
+                  name: avatar_url
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-
-              - column:
-                  name: is_active
-                  type: BOOLEAN
-                  defaultValueBoolean: true
-                  constraints:
-                    nullable: false
-
-              - column:
-                  name: is_blocked
-                  type: BOOLEAN
-                  defaultValueBoolean: false
-                  constraints:
-                    nullable: false
-
-              - column:
-                  name: role_id
-                  type: UUID
-                  constraints:
-                    nullable: false
 
               - column:
                   name: created_at
@@ -56,9 +50,9 @@ databaseChangeLog:
                     nullable: false
 
         - addForeignKeyConstraint:
-            baseTableName: users
-            baseColumnNames: role_id
-            referencedTableName: roles
+            baseTableName: user_profiles
+            baseColumnNames: user_id
+            referencedTableName: users
             referencedColumnNames: id
-            constraintName: fk_users_roles
-            onDelete: RESTRICT
+            constraintName: fk_user_profiles_users
+            onDelete: CASCADE

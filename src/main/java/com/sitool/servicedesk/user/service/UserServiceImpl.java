@@ -10,6 +10,7 @@ import com.sitool.servicedesk.user.entity.User;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
 import com.sitool.servicedesk.user.exceptions.UserNotFoundException;
 import com.sitool.servicedesk.user.repository.UserRepository;
+import com.sitool.servicedesk.userprofile.entity.UserProfile;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.sitool.servicedesk.user.mapper.UserMapper;
@@ -26,30 +27,43 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     /**
-    Method for creating new user
+     * Method for creating new user
      */
     @Override
     @Transactional
     public RegisterUserResponse createNewUser(RegisterUserRequest registerUserRequest) {
 
         final String normalizedEmail = registerUserRequest.email().toLowerCase().trim();
-        boolean userExist = userRepository.existsByEmail(normalizedEmail);
-        if (userExist) throw new UserAlreadyExistException();
 
-        final String encodedPassword = passwordEncoder.encode(registerUserRequest.password());
+        if (userRepository.existsByEmail(normalizedEmail)) {
+            throw new UserAlreadyExistException();
+        }
 
-
-        User newUser = new User(registerUserRequest.firstname(), registerUserRequest.lastname(), normalizedEmail);
         Role role = roleRepository.findByDefaultRoleTrue()
                 .orElseThrow(DefaultRoleNotExistException::new);
 
-        newUser.setRole(role);
+        String encodedPassword = passwordEncoder.encode(registerUserRequest.password());
+
+        // 1. create user
+        User newUser = new User();
+        newUser.setEmail(normalizedEmail);
         newUser.setPassword(encodedPassword);
+        newUser.setRole(role);
+        newUser.setActive(true);
+        newUser.setBlocked(false);
+
+        // 2. create profile
+        UserProfile profile = new UserProfile();
+        profile.setFirstname(registerUserRequest.firstname());
+        profile.setLastname(registerUserRequest.lastname());
+        profile.setUser(newUser);
+
+        // 3. set user profile
+        newUser.setProfile(profile);
 
         userRepository.save(newUser);
 
         return userMapper.toRegisterResponse(newUser);
-
     }
 
     /**
@@ -59,8 +73,6 @@ public class UserServiceImpl implements UserService {
 
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
-
-        String temp = currentUser.getAvatarUrl();
 
         return userMapper.toDto(currentUser);
 

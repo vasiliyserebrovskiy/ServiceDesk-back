@@ -17,3 +17,5 @@ databaseChangeLog:
       file: /db/changelog/008-create-seed-data.yaml
   - include:
       file: /db/changelog/009-create-refresh-tokens-table.yaml
+  - include:
+        file: db/changelog/010-create-user-profiles-table.yaml
