@@ -12,7 +12,7 @@ import com.sitool.servicedesk.user.exceptions.UserNotFoundException;
 import com.sitool.servicedesk.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import com.sitool.servicedesk.user.mapper.UserMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     /**
     Method for creating new user
@@ -47,12 +48,8 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(newUser);
 
-        return new RegisterUserResponse(
-                newUser.getId(),
-                newUser.getFirstname(),
-                newUser.getLastname(),
-                newUser.getEmail(),
-                newUser.getRole().getName());
+        return userMapper.toRegisterResponse(newUser);
+
     }
 
     /**
@@ -63,15 +60,9 @@ public class UserServiceImpl implements UserService {
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
-        //TODO: We need to change return! This method is temporary!
+        String temp = currentUser.getAvatarUrl();
 
-        return new UserDto(
-                currentUser.getId(),
-                currentUser.getFirstname(),
-                currentUser.getLastname(),
-                currentUser.getEmail(),
-                currentUser.getDescription(),
-                currentUser.getAvatarUrl(),
-                currentUser.getRole().getName());
+        return userMapper.toDto(currentUser);
+
     }
 }
