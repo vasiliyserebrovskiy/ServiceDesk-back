@@ -23,6 +23,6 @@ public interface UserService {
      */
     RegisterUserResponse createNewUser(RegisterUserRequest registerUserRequest);
 
-    UserDto getUser(Authentication authentication);
+    UserDto getUser(String email);
 
 }

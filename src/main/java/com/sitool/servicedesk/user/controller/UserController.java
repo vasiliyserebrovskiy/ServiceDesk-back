@@ -7,6 +7,8 @@ import com.sitool.servicedesk.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,13 +22,13 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @Override
-    public RegisterUserResponse createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
+    public RegisterUserResponse createNewUser(RegisterUserRequest registerUserRequest) {
         return userService.createNewUser(registerUserRequest);
     }
 
     @Override
-    public UserDto getUser(Authentication authentication) {
-        return userService.getUser(authentication);
+    public UserDto getUser(UserDetails userDetails) {
+        return userService.getUser(userDetails.getUsername());
     }
 
 

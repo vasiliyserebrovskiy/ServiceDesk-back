@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -83,5 +85,5 @@ public interface UserApi {
             )
     })
     @GetMapping("/me")
-    UserDto getUser(Authentication authentication);
+    UserDto getUser(@AuthenticationPrincipal UserDetails userDetails);
 }

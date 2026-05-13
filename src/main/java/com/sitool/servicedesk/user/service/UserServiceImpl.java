@@ -8,6 +8,7 @@ import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.entity.User;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
+import com.sitool.servicedesk.user.exceptions.UserNotFoundException;
 import com.sitool.servicedesk.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -57,12 +58,10 @@ public class UserServiceImpl implements UserService {
     /**
      * Method for getting user information from database
      */
-    public UserDto getUser(Authentication authentication) {
-        String email = authentication.getName();
+    public UserDto getUser(String email) {
 
-        User currentUser = userRepository.findByEmail(email);
-
-        Role userRole = currentUser.getRole();
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
 
         //TODO: We need to change return! This method is temporary!
 
@@ -73,6 +72,6 @@ public class UserServiceImpl implements UserService {
                 currentUser.getEmail(),
                 currentUser.getDescription(),
                 currentUser.getAvatarUrl(),
-                userRole.getName());
+                currentUser.getRole().getName());
     }
 }

@@ -93,9 +93,9 @@ class UserRepositoryTest {
 
         createUser("exact@example.com");
 
-        User result = userRepository.findByEmail("exact@example.com");
+        User result = userRepository.findByEmail("exact@example.com")
+                .orElseThrow(() -> new AssertionError("User should exist"));
 
-        assertNotNull(result);
         assertEquals("exact@example.com", result.getEmail());
     }
 }
