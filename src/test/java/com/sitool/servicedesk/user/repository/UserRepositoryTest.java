@@ -3,6 +3,7 @@ package com.sitool.servicedesk.user.repository;
 import com.sitool.servicedesk.user.entity.User;
 import com.sitool.servicedesk.role.entity.Role;
 import com.sitool.servicedesk.role.repository.RoleRepository;
+import com.sitool.servicedesk.userprofile.entity.UserProfile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,16 @@ class UserRepositoryTest {
         Role role = createRole();
 
         User user = new User();
-        user.setFirstname("John");
-        user.setLastname("Doe");
+        UserProfile profile = new UserProfile();
+        profile.setFirstname("John");
+        profile.setLastname("Doe");
+        profile.setUser(user);
         user.setEmail(email);
         user.setPassword("encoded-password");
         user.setRole(role);
+        user.setProfile(profile);
+        user.setActive(true);
+
 
         return userRepository.save(user);
     }

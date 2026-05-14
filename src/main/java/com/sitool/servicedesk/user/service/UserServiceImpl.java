@@ -45,17 +45,13 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder.encode(registerUserRequest.password());
 
         // 1. create user
-        User newUser = new User();
-        newUser.setEmail(normalizedEmail);
-        newUser.setPassword(encodedPassword);
+        User newUser = new User(normalizedEmail, encodedPassword);
         newUser.setRole(role);
         newUser.setActive(true);
         newUser.setBlocked(false);
 
         // 2. create profile
-        UserProfile profile = new UserProfile();
-        profile.setFirstname(registerUserRequest.firstname());
-        profile.setLastname(registerUserRequest.lastname());
+        UserProfile profile = new UserProfile(registerUserRequest.firstname(), registerUserRequest.lastname());
         profile.setUser(newUser);
 
         // 3. set user profile

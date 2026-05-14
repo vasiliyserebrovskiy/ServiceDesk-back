@@ -7,6 +7,7 @@ import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
 import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import com.sitool.servicedesk.user.entity.User;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
+import com.sitool.servicedesk.user.mapper.UserMapper;
 import com.sitool.servicedesk.user.repository.UserRepository;
 import com.sitool.servicedesk.utils.BaseEntity;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +39,9 @@ public class UserServiceImplTests {
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Mock
+    private UserMapper userMapper;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -64,6 +68,16 @@ public class UserServiceImplTests {
             setId(user, id);
             return user;
         });
+        when(userMapper.toRegisterResponse(any(User.class)))
+                .thenReturn(
+                        new RegisterUserResponse(
+                                id,
+                                "John",
+                                "Doe",
+                                "test@mail.com",
+                                "USER"
+                        )
+                );
 
         RegisterUserResponse response = userService.createNewUser(request);
 

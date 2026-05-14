@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.UUID;
 
@@ -120,6 +121,10 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "vasiliy@domain.com",
+            roles = "USER"
+    )
     @DisplayName("Should return current authenticated user")
     void getUser_shouldReturnCurrentUser() throws Exception {
 

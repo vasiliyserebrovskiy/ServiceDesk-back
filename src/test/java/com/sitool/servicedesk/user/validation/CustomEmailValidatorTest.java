@@ -2,6 +2,7 @@ package com.sitool.servicedesk.user.validation;
 import com.sitool.servicedesk.user.validation.CustomEmailValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +20,7 @@ class CustomEmailValidatorTest {
     }
 
     @Test
+    @DisplayName("Should return true for valid email")
     void isValid_shouldReturnTrue_forValidEmail() {
 
         boolean result = validator.isValid(
@@ -30,6 +32,7 @@ class CustomEmailValidatorTest {
     }
 
     @Test
+    @DisplayName("Should return false for invalid email format")
     void isValid_shouldReturnFalse_forInvalidEmailFormat() {
 
         boolean result = validator.isValid(
@@ -41,6 +44,7 @@ class CustomEmailValidatorTest {
     }
 
     @Test
+    @DisplayName("Should return false for email with double dots")
     void isValid_shouldReturnFalse_forEmailWithDoubleDots() {
 
         boolean result = validator.isValid(
@@ -52,6 +56,7 @@ class CustomEmailValidatorTest {
     }
 
     @Test
+    @DisplayName("Should return true for null value")
     void isValid_shouldReturnTrue_forNullValue() {
 
         boolean result = validator.isValid(
@@ -63,6 +68,7 @@ class CustomEmailValidatorTest {
     }
 
     @Test
+    @DisplayName("Should return true for blank value")
     void isValid_shouldReturnTrue_forBlankValue() {
 
         boolean result = validator.isValid(
