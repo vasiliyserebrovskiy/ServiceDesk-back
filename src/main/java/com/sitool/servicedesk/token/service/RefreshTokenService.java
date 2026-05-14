@@ -7,6 +7,9 @@ import com.sitool.servicedesk.token.utils.TokenHasher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.Instant;
 import java.util.UUID;
@@ -24,6 +27,7 @@ public class RefreshTokenService {
      * We do NOT store raw JWT refresh token for security reasons.
      * Instead, we store only its hash.
      */
+    @Transactional
     public void saveRefreshToken(UUID userId, String token, Instant createdAt, Instant expiresAt) {
 
         RefreshToken refreshToken = new RefreshToken();
@@ -68,14 +72,15 @@ public class RefreshTokenService {
      * Marks refresh token as revoked in memory.
      * Caller is responsible for persisting the change if needed.
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void revokeRefreshToken(RefreshToken stored) {
-        stored.setRevoked(true);
-        // intentionally not saving here (controlled by caller transaction)
+        refreshTokenRepository.revokeByToken(stored.getTokenHash());
     }
 
     /**
      * Logs out user by revoking refresh token in DB.
      */
+    @Transactional
     public void logout(String refreshToken) {
 
         String hash = TokenHasher.generateRefreshTokenHash(refreshToken);

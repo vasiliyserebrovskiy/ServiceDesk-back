@@ -105,17 +105,19 @@ public class AuthService {
     }
 
     /**
-     * Validates refresh token, revokes the old token,
+     * Validates the provided refresh token, revokes the corresponding stored token,
      * and issues a new access/refresh token pair.
      *
-     * <p>Implements refresh token rotation strategy:
-     * old refresh token becomes invalid immediately
-     * after successful refresh.</p>
+     * <p>This method implements refresh token rotation with server-side revocation.
+     * The old refresh token is invalidated in the database using a hash-based lookup
+     * and cannot be reused.</p>
      *
-     * @param refreshToken refresh token received from client
+     * <p>User account status (active/blocked) is verified before issuing new tokens.</p>
+     *
+     * @param refreshToken raw refresh token received from client
      * @return newly generated access and refresh tokens
-     * @throws RestApiException if token is invalid
-     *                          or related user does not exist
+     * @throws RestApiException if token is invalid, expired,
+     *                          or user account is not allowed to authenticate
      */
     @Transactional
     public TokenResponseDto refreshAccessToken(String refreshToken) {
@@ -126,6 +128,21 @@ public class AuthService {
 
         User user = userRepository.findById(storedToken.getUserId())
                 .orElseThrow(() -> new RestApiException(HttpStatus.UNAUTHORIZED, "User not found"));
+
+        // Ensure user is allowed to receive new tokens
+        if (!user.isActive()) {
+            throw new RestApiException(
+                    HttpStatus.FORBIDDEN,
+                    "User account is not active."
+            );
+        }
+
+        if (user.isBlocked()) {
+            throw new RestApiException(
+                    HttpStatus.FORBIDDEN,
+                    "User account is locked."
+            );
+        }
 
         String username = user.getEmail();
 
