@@ -26,10 +26,10 @@ public class User extends BaseEntity {
     private String password;
 
     @Column(name = "is_active", nullable = false)
-    private boolean active = true;
+    private boolean isActive = true;
 
     @Column(name = "is_blocked", nullable = false)
-    private boolean blocked = false;
+    private boolean isBlocked = false;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
@@ -52,8 +52,8 @@ public class User extends BaseEntity {
     public String toString() {
         return "User {" +
                 "email='" + email + '\'' +
-                ", active=" + active +
-                ", blocked=" + blocked +
+                ", active=" + isActive +
+                ", blocked=" + isBlocked +
                 ", role=" + role +
                 ", profile=" + profile +
                 '}';

@@ -40,7 +40,7 @@ public record AuthUserDetails(User user) implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // account locking is not implemented yet
+        return !user.isBlocked();
     }
 
     @Override
@@ -50,6 +50,6 @@ public record AuthUserDetails(User user) implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true; // user activation status is not implemented yet
+        return user.isActive();
     }
 }

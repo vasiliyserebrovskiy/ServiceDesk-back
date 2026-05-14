@@ -66,12 +66,15 @@ public class AuthService {
                     )
             );
         } catch (DisabledException ex) {
+            //logging
             throw new RestApiException(HttpStatus.FORBIDDEN,
-                    "User account is not active. Please confirm your email.");
+                    "User account is not active.");
         } catch (LockedException ex) {
+            //logging
             throw new RestApiException(HttpStatus.FORBIDDEN,
                     "User account is locked.");
         } catch (BadCredentialsException ex) {
+            //logging
             throw new RestApiException(HttpStatus.UNAUTHORIZED,
                     "Invalid username or password.");
         }
