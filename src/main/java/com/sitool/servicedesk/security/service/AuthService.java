@@ -9,6 +9,7 @@ import com.sitool.servicedesk.user.entity.User;
 import com.sitool.servicedesk.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import com.sitool.servicedesk.exceptions.common.RestApiException;
@@ -34,6 +35,7 @@ import java.util.UUID;
  * </ul>
  * </p>
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -66,15 +68,15 @@ public class AuthService {
                     )
             );
         } catch (DisabledException ex) {
-            //logging
+            log.info("User {} has been disabled", loginRequest.email());
             throw new RestApiException(HttpStatus.FORBIDDEN,
                     "User account is not active.");
         } catch (LockedException ex) {
-            //logging
+            log.info("User {} has been locked", loginRequest.email());
             throw new RestApiException(HttpStatus.FORBIDDEN,
                     "User account is locked.");
         } catch (BadCredentialsException ex) {
-            //logging
+            log.info("Invalid username or password, for user {}", loginRequest.email());
             throw new RestApiException(HttpStatus.UNAUTHORIZED,
                     "Invalid username or password.");
         }
@@ -131,6 +133,7 @@ public class AuthService {
 
         // Ensure user is allowed to receive new tokens
         if (!user.isActive()) {
+            log.info("User {} has been disabled.", storedToken.getUserId());
             throw new RestApiException(
                     HttpStatus.FORBIDDEN,
                     "User account is not active."
@@ -138,6 +141,7 @@ public class AuthService {
         }
 
         if (user.isBlocked()) {
+            log.info("User {} has been blocked.", storedToken.getUserId());
             throw new RestApiException(
                     HttpStatus.FORBIDDEN,
                     "User account is locked."

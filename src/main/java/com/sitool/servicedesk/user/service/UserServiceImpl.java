@@ -14,9 +14,11 @@ import com.sitool.servicedesk.userprofile.entity.UserProfile;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.sitool.servicedesk.user.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Method for creating new user
      */
+
     @Override
     @Transactional
     public RegisterUserResponse createNewUser(RegisterUserRequest registerUserRequest) {
@@ -58,6 +61,8 @@ public class UserServiceImpl implements UserService {
         newUser.setProfile(profile);
 
         userRepository.save(newUser);
+
+        log.info("New User {} has been created.", newUser.getId());
 
         return userMapper.toRegisterResponse(newUser);
     }

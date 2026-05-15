@@ -5,6 +5,7 @@ import com.sitool.servicedesk.token.entity.RefreshToken;
 import com.sitool.servicedesk.token.repository.RefreshTokenRepository;
 import com.sitool.servicedesk.token.utils.TokenHasher;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.UUID;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
@@ -58,10 +59,12 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new RestApiException(HttpStatus.UNAUTHORIZED, "Invalid refresh Token"));
 
         if (stored.isRevoked()) {
+            log.info("Refresh Token for user {} has been revoked.", stored.getUserId());
             throw new RestApiException(HttpStatus.UNAUTHORIZED, "Token revoked");
         }
 
         if (stored.getExpiresAt().isBefore(Instant.now())) {
+            log.info("Refresh Token for user {} has expired.", stored.getUserId());
             throw new RestApiException(HttpStatus.UNAUTHORIZED, "Token expired");
         }
 
