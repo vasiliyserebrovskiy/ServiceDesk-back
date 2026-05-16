@@ -18,5 +18,12 @@ public interface RoleRepository extends JpaRepository<Role, UUID> {
      * @return optional containing the default role if present
      */
     Optional<Role> findByDefaultRoleTrue();
+    /**
+     * Finds role by role name.
+     *
+     * @param name role name
+     * @return optional role
+     */
+    Optional<Role> findByName(String name);
 
 }

@@ -78,4 +78,41 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(currentUser);
 
     }
+
+    /**
+     * Creates the default administrator user during application startup.
+     */
+    public void createAdminIfNotExists() {
+        if (userRepository.existsByEmail("admin@domain.com")) {
+            return;
+        }
+        User user = new User();
+        UserProfile profile = new UserProfile();
+
+        user.setEmail("admin@domain.com");
+        user.setPassword(passwordEncoder.encode("P@ssw0rd"));
+        user.setActive(true);
+
+        Role adminRole = roleRepository
+                .findByName("ADMIN")
+                .orElseThrow(() -> {
+
+                    log.error("Role ADMIN was not found in database!");
+
+                    return new IllegalStateException(
+                            "Role ADMIN not found."
+                    );
+                });
+
+        user.setRole(adminRole);
+        profile.setFirstname("admin");
+        profile.setLastname("Administrator");
+        profile.setDescription("Default administrator account. " +
+                "Deactivate this account after creating a personal admin user.");
+
+        profile.setUser(user);
+        user.setProfile(profile);
+
+        userRepository.save(user);
+    }
 }
