@@ -20,5 +20,7 @@ public interface UserMapper {
     @Mapping(target = "firstname", expression = "java(user.getProfile().getFirstname())")
     @Mapping(target = "lastname", expression = "java(user.getProfile().getLastname())")
     @Mapping(target = "role", expression = "java(user.getRole().getName())")
+    @Mapping(target = "description", expression = "java(user.getProfile().getDescription())")
+    @Mapping(target = "url", expression = "java(user.getProfile().getAvatarUrl())")
     RegisterUserResponse toRegisterResponse(User user);
 }

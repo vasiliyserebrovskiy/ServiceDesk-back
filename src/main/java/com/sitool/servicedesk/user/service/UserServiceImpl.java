@@ -2,6 +2,7 @@ package com.sitool.servicedesk.user.service;
 
 import com.sitool.servicedesk.role.entity.Role;
 import com.sitool.servicedesk.role.exceptions.DefaultRoleNotExistException;
+import com.sitool.servicedesk.role.exceptions.RoleNotExistException;
 import com.sitool.servicedesk.role.repository.RoleRepository;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
 import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
@@ -42,8 +43,8 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException();
         }
 
-        Role role = roleRepository.findByDefaultRoleTrue()
-                .orElseThrow(DefaultRoleNotExistException::new);
+        Role role = roleRepository.findByName(registerUserRequest.role())
+                .orElseThrow(RoleNotExistException::new);
 
         String encodedPassword = passwordEncoder.encode(registerUserRequest.password());
 
@@ -55,9 +56,19 @@ public class UserServiceImpl implements UserService {
 
         // 2. create profile
         UserProfile profile = new UserProfile(registerUserRequest.firstname(), registerUserRequest.lastname());
+
+        if (registerUserRequest.description() != null && !registerUserRequest.description().isBlank()) {
+            profile.setDescription(registerUserRequest.description());
+        }
+
+        // We did not implement avatar for now!
+        if (registerUserRequest.url() != null && !registerUserRequest.url().isBlank()) {
+            profile.setAvatarUrl(registerUserRequest.url());
+        }
+        //3. set profile user
         profile.setUser(newUser);
 
-        // 3. set user profile
+        // 4. set user profile
         newUser.setProfile(profile);
 
         userRepository.save(newUser);

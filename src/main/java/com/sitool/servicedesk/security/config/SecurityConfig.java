@@ -85,7 +85,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/webjars/**").permitAll()
                         //Register user
-                        .requestMatchers(HttpMethod.POST, "/api/v1/users/register").permitAll()
+                        //.requestMatchers(HttpMethod.POST, "/api/v1/users/register").permitAll()
                         //Login user
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh-token").permitAll()

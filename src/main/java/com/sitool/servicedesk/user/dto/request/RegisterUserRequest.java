@@ -20,6 +20,7 @@ public record RegisterUserRequest(
         @NotBlank(message = "{user.firstname.notBlank}")
         @Size(min = UserValidationConstants.FIRSTNAME_MIN, max = UserValidationConstants.FIRSTNAME_MAX, message="{user.firstname.length}")
         String firstname,
+
         @Schema(
                 description = "New user last name",
                 example = "Serebrovskii"
@@ -27,6 +28,7 @@ public record RegisterUserRequest(
         @NotBlank(message = "{user.lastname.notBlank}")
         @Size(min = UserValidationConstants.LASTNAME_MIN, max = UserValidationConstants.LASTNAME_MAX, message="{user.lastname.length}")
         String lastname,
+
         @Schema(
                 description = "New user email",
                 example = "vasiliy@domain.com"
@@ -35,6 +37,7 @@ public record RegisterUserRequest(
         @Size(min=UserValidationConstants.EMAIL_MIN_LENGTH, max=UserValidationConstants.EMAIL_MAX_LENGTH, message="{user.email.length}")
         @ValidCustomEmail(message = "{user.email.validation}")
         String email,
+
         @Schema(
                 description = "New user password",
                 example = "1qaZ_Xsw@"
@@ -45,6 +48,25 @@ public record RegisterUserRequest(
                 regexp = UserValidationConstants.PASSWORD_REGEX,
                 message = "{user.password.validation}"
         )
-        String password
+        String password,
+
+        @Schema(
+                description = "New user role",
+                example = "USER"
+        )
+        @NotBlank(message="{user.role.notBlank}")
+        String role,
+        @Schema(
+                description = "New user description",
+                example = "Some description of a user"
+        )
+        String description,
+
+        //Will be implemented later!
+        @Schema(
+                description = "Url or Photo of a new user",
+                example = "photo.jpg"
+        )
+        String url
 ) {
 }

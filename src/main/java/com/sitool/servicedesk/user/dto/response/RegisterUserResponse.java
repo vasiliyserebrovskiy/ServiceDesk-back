@@ -13,6 +13,8 @@ public record RegisterUserResponse(
     String firstname,
     String lastname,
     String email,
-    String role
+    String role,
+    String description,
+    String url
 ) {
 }

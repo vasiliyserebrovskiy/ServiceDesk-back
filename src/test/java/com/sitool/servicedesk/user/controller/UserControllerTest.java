@@ -76,7 +76,9 @@ class UserControllerTest {
                 "Vasiliy",
                 "Serebrovskii",
                 "vasiliy@domain.com",
-                "USER"
+                "USER",
+                "",
+                ""
         );
 
         when(userService.createNewUser(any(RegisterUserRequest.class)))

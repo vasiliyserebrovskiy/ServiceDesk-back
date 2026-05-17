@@ -55,7 +55,7 @@ public class UserServiceImplTests {
         UUID id = UUID.randomUUID();
 
         RegisterUserRequest request =
-                new RegisterUserRequest("John", "Doe", "test@mail.com", "1234");
+                new RegisterUserRequest("John", "Doe", "test@mail.com", "1234", "USER", "","");
 
         Role role = new Role();
         role.setName("USER");
@@ -75,7 +75,9 @@ public class UserServiceImplTests {
                                 "John",
                                 "Doe",
                                 "test@mail.com",
-                                "USER"
+                                "USER",
+                                "",
+                                ""
                         )
                 );
 
@@ -93,7 +95,7 @@ public class UserServiceImplTests {
     void shouldThrowExceptionWhenEmailAlreadyExists() {
 
         RegisterUserRequest request =
-                new RegisterUserRequest("John", "Doe", "test@mail.com", "1234");
+                new RegisterUserRequest("John", "Doe", "test@mail.com", "1234", "USER", "","");
 
         when(userRepository.existsByEmail("test@mail.com")).thenReturn(true);
 
@@ -109,7 +111,7 @@ public class UserServiceImplTests {
     void shouldThrowExceptionWhenDefaultRoleNotFound() {
 
         RegisterUserRequest request =
-                new RegisterUserRequest("John", "Doe", "test@mail.com", "1234");
+                new RegisterUserRequest("John", "Doe", "test@mail.com", "1234", "USER", "","");
 
         when(userRepository.existsByEmail("test@mail.com")).thenReturn(false);
         when(roleRepository.findByDefaultRoleTrue()).thenReturn(Optional.empty());
