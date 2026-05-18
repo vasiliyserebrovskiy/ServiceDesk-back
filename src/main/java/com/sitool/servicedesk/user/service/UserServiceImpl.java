@@ -62,8 +62,8 @@ public class UserServiceImpl implements UserService {
         }
 
         // We did not implement avatar for now!
-        if (registerUserRequest.url() != null && !registerUserRequest.url().isBlank()) {
-            profile.setAvatarUrl(registerUserRequest.url());
+        if (registerUserRequest.avatarUrl() != null && !registerUserRequest.avatarUrl().isBlank()) {
+            profile.setAvatarUrl(registerUserRequest.avatarUrl());
         }
         //3. set profile user
         profile.setUser(newUser);

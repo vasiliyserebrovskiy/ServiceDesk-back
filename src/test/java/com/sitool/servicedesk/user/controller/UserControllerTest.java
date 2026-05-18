@@ -84,14 +84,17 @@ class UserControllerTest {
         when(userService.createNewUser(any(RegisterUserRequest.class)))
                 .thenReturn(response);
 
-        mockMvc.perform(post("/api/v1/users/register")
+        mockMvc.perform(post("/api/v1/users/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
                                   "firstname": "Vasiliy",
                                   "lastname": "Serebrovskii",
                                   "email": "vasiliy@domain.com",
-                                  "password": "StrongPassword123!"
+                                  "password": "StrongPassword123!",
+                                  "role": "USER",
+                                  "description": "Test user",
+                                  "avatarUrl": ""
                                 }
                                 """))
                 .andExpect(status().isCreated())
@@ -107,7 +110,7 @@ class UserControllerTest {
     @DisplayName("Should return 400 when request is invalid")
     void createNewUser_shouldReturnBadRequest_whenInvalidInput() throws Exception {
 
-        mockMvc.perform(post("/api/v1/users/register")
+        mockMvc.perform(post("/api/v1/users/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {

@@ -67,6 +67,6 @@ public record RegisterUserRequest(
                 description = "Url or Photo of a new user",
                 example = "photo.jpg"
         )
-        String url
+        String avatarUrl
 ) {
 }

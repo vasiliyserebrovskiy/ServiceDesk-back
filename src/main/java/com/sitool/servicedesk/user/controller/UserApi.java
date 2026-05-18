@@ -63,7 +63,7 @@ public interface UserApi {
             )
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/register")
+    @PostMapping("/create")
     RegisterUserResponse createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest);
 
     @Operation(
