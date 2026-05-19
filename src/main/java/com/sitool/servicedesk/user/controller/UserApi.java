@@ -5,6 +5,7 @@ import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
 import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -14,10 +15,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * REST API for user management operations.
@@ -85,5 +88,60 @@ public interface UserApi {
             )
     })
     @GetMapping("/me")
-    UserDto getUser(@AuthenticationPrincipal UserDetails userDetails);
+    UserDto getMe(@AuthenticationPrincipal UserDetails userDetails);
+
+    @Operation(
+            summary = "Get all users",
+            description = "Returns a list of all users in the system."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Users retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(
+                                    schema = @Schema(implementation = UserDto.class)
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error"
+            )
+    })
+    @GetMapping
+    List<UserDto> getAllUsers();
+
+    @Operation(
+            summary = "Get user by id",
+            description = "Returns user information for the specified userId (UUID)."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = UserDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid UUID format"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
+    @GetMapping("/{userId}")
+    UserDto getUser(
+            @Parameter(
+                    description = "Unique user identifier (UUID format)",
+                    required = true,
+                    example = "550e8400-e29b-41d4-a716-446655440000"
+            )
+            @PathVariable UUID userId
+    );
 }

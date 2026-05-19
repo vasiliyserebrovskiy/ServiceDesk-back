@@ -143,7 +143,7 @@ class UserControllerTest {
                 "USER"
         );
 
-        when(userService.getUser(any()))
+        when(userService.getMe(any()))
                 .thenReturn(userDto);
 
         mockMvc.perform(get("/api/v1/users/me"))
@@ -153,6 +153,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email").value("vasiliy@domain.com"))
                 .andExpect(jsonPath("$.role").value("USER"));
 
-        verify(userService).getUser(any());
+        verify(userService).getMe(any());
     }
 }

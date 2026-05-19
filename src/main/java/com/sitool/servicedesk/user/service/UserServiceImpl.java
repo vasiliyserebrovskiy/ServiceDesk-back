@@ -1,7 +1,6 @@
 package com.sitool.servicedesk.user.service;
 
 import com.sitool.servicedesk.role.entity.Role;
-import com.sitool.servicedesk.role.exceptions.DefaultRoleNotExistException;
 import com.sitool.servicedesk.role.exceptions.RoleNotExistException;
 import com.sitool.servicedesk.role.repository.RoleRepository;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
@@ -18,6 +17,9 @@ import com.sitool.servicedesk.user.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -81,7 +83,8 @@ public class UserServiceImpl implements UserService {
     /**
      * Method for getting user information from database
      */
-    public UserDto getUser(String email) {
+    @Override
+    public UserDto getMe(String email) {
 
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
@@ -93,6 +96,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Creates the default administrator user during application startup.
      */
+    @Override
     public void createAdminIfNotExists() {
         if (userRepository.existsByEmail("admin@domain.com")) {
             return;
@@ -126,4 +130,30 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
+
+    /**
+     * Retrieves all users from the system.
+     */
+    @Override
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toDto)
+                .toList();
+    }
+
+    /**
+     * Retrieves a user by their unique identifier.
+     *
+     * @param userId unique user UUID
+     */
+    @Override
+    public UserDto getUser(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return userMapper.toDto(user);
+    }
+
+
 }
