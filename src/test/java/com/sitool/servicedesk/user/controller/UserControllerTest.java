@@ -140,7 +140,9 @@ class UserControllerTest {
                 "vasiliy@domain.com",
                 "",
                 "",
-                "USER"
+                "USER",
+                true,
+                false
         );
 
         when(userService.getMe(any()))

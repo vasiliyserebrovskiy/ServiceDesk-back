@@ -17,5 +17,7 @@ public record UserDto(
     String email,
     String description,
     String url,
-    String role
+    String role,
+    boolean isActive,
+    boolean isBlocked
 ) { }

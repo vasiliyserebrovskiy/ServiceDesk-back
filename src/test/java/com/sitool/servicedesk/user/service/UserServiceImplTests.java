@@ -2,6 +2,7 @@ package com.sitool.servicedesk.user.service;
 
 import com.sitool.servicedesk.role.entity.Role;
 import com.sitool.servicedesk.role.exceptions.DefaultRoleNotExistException;
+import com.sitool.servicedesk.role.exceptions.RoleNotExistException;
 import com.sitool.servicedesk.role.repository.RoleRepository;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
 import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
@@ -61,7 +62,7 @@ public class UserServiceImplTests {
         role.setName("USER");
 
         when(userRepository.existsByEmail("test@mail.com")).thenReturn(false);
-        when(roleRepository.findByDefaultRoleTrue()).thenReturn(Optional.of(role));
+        when(roleRepository.findByName("USER")).thenReturn(Optional.of(role));
         when(passwordEncoder.encode("1234")).thenReturn("encoded");
         when(userRepository.save(any(User.class))).thenAnswer(i -> {
             User user = i.getArgument(0);
@@ -107,16 +108,16 @@ public class UserServiceImplTests {
     }
 
     @Test
-    @DisplayName("Creating user → default role not found → throws exception")
-    void shouldThrowExceptionWhenDefaultRoleNotFound() {
+    @DisplayName("Creating user → role not found → throws exception")
+    void shouldThrowExceptionWhenRoleNotFound() {
 
         RegisterUserRequest request =
-                new RegisterUserRequest("John", "Doe", "test@mail.com", "1234", "USER", "","");
+                new RegisterUserRequest("John", "Doe", "test@mail.com", "1234", "TEST", "","");
 
         when(userRepository.existsByEmail("test@mail.com")).thenReturn(false);
-        when(roleRepository.findByDefaultRoleTrue()).thenReturn(Optional.empty());
+        when(roleRepository.findByName("TEST")).thenReturn(Optional.empty());
 
-        assertThrows(DefaultRoleNotExistException.class,
+        assertThrows(RoleNotExistException.class,
                 () -> userService.createNewUser(request));
 
         verify(userRepository, never()).save(any());

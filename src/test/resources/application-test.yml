@@ -1,10 +1,27 @@
 spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
   liquibase:
     enabled: false
 
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create-drop
-  jwt:
-    at:
-      live-in-min: 15
+
+jwt:
+  at:
+    secret: 287wU43o9cKDnHAh5GAukCvXDQeSHsOVlsjBDfC4jqE=
+    live-in-min: 15
+  rt:
+    live-in-min: 3600
+    secret: uWW3PY5bCLizaMhpjGEXhtb5eU1cAzqveIJvEKRKTv0=

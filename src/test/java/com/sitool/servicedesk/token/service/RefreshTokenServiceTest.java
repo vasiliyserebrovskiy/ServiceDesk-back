@@ -128,11 +128,11 @@ class RefreshTokenServiceTest {
     void revokeRefreshToken_shouldSetRevokedTrue() {
 
         RefreshToken token = new RefreshToken();
-        token.setRevoked(false);
+        token.setTokenHash("hash123");
 
         refreshTokenService.revokeRefreshToken(token);
 
-        assertTrue(token.isRevoked());
+        verify(refreshTokenRepository).revokeByToken("hash123");
     }
 
     @Test
