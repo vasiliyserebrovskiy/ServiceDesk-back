@@ -2,7 +2,6 @@ package com.sitool.servicedesk.user.controller;
 
 import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
-import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,14 +38,18 @@ public interface UserApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User registered successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RegisterUserResponse.class),
+                            schema = @Schema(implementation = UserDto.class),
                             examples = @ExampleObject(value = """
                                     {
-                                      "id": "123e4567-e89b-12d3-a456-426614174000",
+                                      "id": "767ea865-8b32-454c-af05-52508be4033c",
                                       "firstname": "Vasiliy",
                                       "lastname": "Serebrovskii",
                                       "email": "vasiliy@domain.com",
-                                      "role": "USER"
+                                      "description":"some description",
+                                      "avatar_url":"https://avatar.jpg",
+                                      "role_id": "3453d552-f904-4f46-91c4-6b782553b421",
+                                      "is_active":true,
+                                      "is_blocked": false
                                     }
                                     """))
             ),
@@ -67,7 +70,7 @@ public interface UserApi {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
-    RegisterUserResponse createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest);
+    UserDto createNewUser(@Valid @RequestBody RegisterUserRequest registerUserRequest);
 
     @Operation(
             summary = "Get current user",

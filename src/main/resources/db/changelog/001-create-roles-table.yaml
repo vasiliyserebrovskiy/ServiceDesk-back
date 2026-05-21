@@ -19,6 +19,12 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
+                  name: display_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
                   name: description
                   type: TEXT
                   constraints:

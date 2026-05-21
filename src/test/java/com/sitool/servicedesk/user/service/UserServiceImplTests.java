@@ -1,11 +1,11 @@
 package com.sitool.servicedesk.user.service;
 
 import com.sitool.servicedesk.role.entity.Role;
-import com.sitool.servicedesk.role.exceptions.DefaultRoleNotExistException;
+
 import com.sitool.servicedesk.role.exceptions.RoleNotExistException;
 import com.sitool.servicedesk.role.repository.RoleRepository;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
-import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
+import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.entity.User;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
 import com.sitool.servicedesk.user.mapper.UserMapper;
@@ -54,6 +54,7 @@ public class UserServiceImplTests {
     void shouldCreateUserSuccessfully() {
 
         UUID id = UUID.randomUUID();
+        UUID roleId = UUID.randomUUID();
 
         RegisterUserRequest request =
                 new RegisterUserRequest("John", "Doe", "test@mail.com", "1234", "USER", "","");
@@ -69,26 +70,28 @@ public class UserServiceImplTests {
             setId(user, id);
             return user;
         });
-        when(userMapper.toRegisterResponse(any(User.class)))
+        when(userMapper.toDto(any(User.class)))
                 .thenReturn(
-                        new RegisterUserResponse(
+                        new UserDto(
                                 id,
                                 "John",
                                 "Doe",
                                 "test@mail.com",
-                                "USER",
+                                "some description",
                                 "",
-                                ""
+                                roleId,
+                                true,
+                                false
                         )
                 );
 
-        RegisterUserResponse response = userService.createNewUser(request);
+        UserDto response = userService.createNewUser(request);
 
         assertEquals(id, response.id());
         assertEquals("John", response.firstname());
         assertEquals("Doe", response.lastname());
         assertEquals("test@mail.com", response.email());
-        assertEquals("USER", response.role());
+        assertEquals(roleId, response.roleId());
     }
 
     @Test

@@ -20,4 +20,10 @@ public interface RoleService {
      * @return list of role DTOs representing all system roles
      */
     List<RoleDto> getRoles();
+
+    /**
+     * Creates a default roles during application startup
+     * if they do not already exist in the system.
+     */
+    void  createRolesIfNorExists();
 }

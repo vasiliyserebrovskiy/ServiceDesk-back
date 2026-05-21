@@ -4,7 +4,6 @@ import com.sitool.servicedesk.role.entity.Role;
 import com.sitool.servicedesk.role.exceptions.RoleNotExistException;
 import com.sitool.servicedesk.role.repository.RoleRepository;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
-import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.entity.User;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
@@ -37,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public RegisterUserResponse createNewUser(RegisterUserRequest registerUserRequest) {
+    public UserDto createNewUser(RegisterUserRequest registerUserRequest) {
 
         final String normalizedEmail = registerUserRequest.email().toLowerCase().trim();
 
@@ -77,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
         log.info("New User {} has been created.", newUser.getId());
 
-        return userMapper.toRegisterResponse(newUser);
+        return userMapper.toDto(newUser);
     }
 
     /**
