@@ -23,6 +23,7 @@ public class RoleRepositoryTest {
 
         Role userRole = new Role();
         userRole.setName("USER");
+        userRole.setDisplayName("User");
         userRole.setDescription("Default user role");
         userRole.setDefaultRole(true);
 
@@ -42,6 +43,7 @@ public class RoleRepositoryTest {
 
         Role adminRole = new Role();
         adminRole.setName("ADMIN");
+        adminRole.setDisplayName("Admin");
         adminRole.setDescription("Administrator role");
         adminRole.setDefaultRole(false);
 
