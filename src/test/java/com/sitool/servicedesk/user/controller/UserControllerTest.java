@@ -25,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -76,7 +77,7 @@ class UserControllerTest {
                 "Vasiliy",
                 "Serebrovskii",
                 "vasiliy@domain.com",
-                "USER",
+                "Some description",
                 "",
                 roleId,
                 true,
@@ -103,7 +104,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.firstname").value("Vasiliy"))
                 .andExpect(jsonPath("$.lastname").value("Serebrovskii"))
                 .andExpect(jsonPath("$.email").value("vasiliy@domain.com"))
-                .andExpect(jsonPath("$.role").value("USER"));
+                .andExpect(jsonPath("$.role_id").value(roleId.toString()));
 
         verify(userService).createNewUser(any(RegisterUserRequest.class));
     }
@@ -140,7 +141,7 @@ class UserControllerTest {
                 "Vasiliy",
                 "Serebrovskii",
                 "vasiliy@domain.com",
-                "",
+                "Some description",
                 "",
                 roleId,
                 true,
@@ -155,7 +156,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.firstname").value("Vasiliy"))
                 .andExpect(jsonPath("$.lastname").value("Serebrovskii"))
                 .andExpect(jsonPath("$.email").value("vasiliy@domain.com"))
-                .andExpect(jsonPath("$.role").value("USER"));
+                .andExpect(jsonPath("$.role_id").value(roleId.toString()));
 
         verify(userService).getMe(any());
     }

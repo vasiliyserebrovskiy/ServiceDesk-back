@@ -27,6 +27,7 @@ class UserRepositoryTest {
     private Role createRole() {
         Role role = new Role();
         role.setName("USER");
+        role.setDisplayName("User");
         role.setDescription("Default role");
         role.setDefaultRole(true);
         return roleRepository.save(role);
