@@ -1,7 +1,6 @@
 package com.sitool.servicedesk.user.service;
 
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
-import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
 
@@ -23,7 +22,7 @@ public interface UserService {
      *
      * @throws UserAlreadyExistException if a user with the given email already exists
      */
-    RegisterUserResponse createNewUser(RegisterUserRequest registerUserRequest);
+    UserDto createNewUser(RegisterUserRequest registerUserRequest);
 
     /**
      * Returns information about the currently authenticated user.

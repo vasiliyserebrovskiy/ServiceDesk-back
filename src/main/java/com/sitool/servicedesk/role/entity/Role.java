@@ -21,6 +21,9 @@ public class Role extends BaseEntity {
     @Column(name="name", nullable = false, unique = true)
     private String name;
 
+    @Column(name="display_name", nullable = false, unique = true)
+    private String displayName;
+
     @Column(name="description")
     private String description;
 

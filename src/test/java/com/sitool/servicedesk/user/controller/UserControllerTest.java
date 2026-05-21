@@ -4,7 +4,6 @@ import com.sitool.servicedesk.security.service.CustomUserDetailsService;
 import com.sitool.servicedesk.security.service.JwtTokenService;
 import com.sitool.servicedesk.token.service.RefreshTokenService;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
-import com.sitool.servicedesk.user.dto.response.RegisterUserResponse;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -70,15 +69,18 @@ class UserControllerTest {
     @Test
     @DisplayName("Should create new user and return 201")
     void createNewUser_shouldReturnCreated() throws Exception {
+        UUID roleId = UUID.randomUUID();
 
-        RegisterUserResponse response = new RegisterUserResponse(
+        UserDto response = new UserDto(
                 UUID.randomUUID(),
                 "Vasiliy",
                 "Serebrovskii",
                 "vasiliy@domain.com",
                 "USER",
                 "",
-                ""
+                roleId,
+                true,
+                false
         );
 
         when(userService.createNewUser(any(RegisterUserRequest.class)))
@@ -132,7 +134,7 @@ class UserControllerTest {
     )
     @DisplayName("Should return current authenticated user")
     void getUser_shouldReturnCurrentUser() throws Exception {
-
+        UUID roleId = UUID.randomUUID();
         UserDto userDto = new UserDto(
                 UUID.randomUUID(),
                 "Vasiliy",
@@ -140,7 +142,7 @@ class UserControllerTest {
                 "vasiliy@domain.com",
                 "",
                 "",
-                "USER",
+                roleId,
                 true,
                 false
         );

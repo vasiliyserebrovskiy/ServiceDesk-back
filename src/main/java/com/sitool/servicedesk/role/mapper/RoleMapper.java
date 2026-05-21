@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 public interface RoleMapper {
 
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "displayName", source = "displayName")
     @Mapping(target = "description", source = "description")
     @Mapping(target = "defaultRole", source = "defaultRole")
     RoleDto toDto(Role role);
