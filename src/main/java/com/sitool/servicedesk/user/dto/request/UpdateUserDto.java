@@ -1,6 +1,8 @@
 package com.sitool.servicedesk.user.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
@@ -20,10 +22,14 @@ import java.util.UUID;
  * @param avatarUrl URL of the user's avatar image
  */
 public record UpdateUserDto(
+        @NotBlank(message = "{user.firstname.notBlank}")
         String firstname,
+        @NotBlank(message = "{user.lastnamename.notBlank}")
         String lastname,
+        @NotBlank(message = "{user.email.notBlank}")
         String email,
         @JsonProperty("roleId")
+        @NotNull(message = "{user.role.notNull}")
         UUID roleId,
         @JsonProperty("isActive")
         boolean isActive,

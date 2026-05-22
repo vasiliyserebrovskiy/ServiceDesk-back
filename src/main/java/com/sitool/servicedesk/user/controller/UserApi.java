@@ -171,5 +171,5 @@ public interface UserApi {
             )
     })
     @PatchMapping("{userId}")
-    UserDto updateUser(@PathVariable UUID userId, @RequestBody UpdateUserDto updateUserDto);
+    UserDto updateUser(@PathVariable UUID userId, @Valid @RequestBody UpdateUserDto updateUserDto);
 }
