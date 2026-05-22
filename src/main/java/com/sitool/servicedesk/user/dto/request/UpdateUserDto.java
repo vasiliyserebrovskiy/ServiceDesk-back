@@ -36,6 +36,7 @@ public record UpdateUserDto(
         @JsonProperty("isBlocked")
         boolean isBlocked,
         String description,
+        @JsonProperty("avatarUrl")
         String avatarUrl
 ) {
 }

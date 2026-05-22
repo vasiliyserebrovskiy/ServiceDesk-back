@@ -10,14 +10,33 @@ import java.util.UUID;
 /**
  * Repository for managing {@link User} entities.
  *
- * <p>Provides basic CRUD operations via {@link JpaRepository}
- * and additional query methods for user lookup and validation.</p>
+ * <p>Provides CRUD operations and custom query methods
+ * for user lookup and validation.</p>
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+    /**
+     * Checks whether a user with the given email already exists.
+     *
+     * @param email user email
+     * @return true if a user exists, otherwise false
+     */
     boolean existsByEmail(String email);
 
+    /**
+     * Finds a user by email ignoring letter case.
+     *
+     * @param email user email
+     * @return optional containing the found user
+     */
     Optional<User> findByEmailIgnoreCase(String email);
+
+    /**
+     * Finds a user by exact email match.
+     *
+     * @param email user email
+     * @return optional containing the found user
+     */
     Optional<User> findByEmail(String email);
 }

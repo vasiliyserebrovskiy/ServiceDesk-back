@@ -17,7 +17,6 @@ import com.sitool.servicedesk.user.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +41,7 @@ public class UserServiceImpl implements UserService {
         final String normalizedEmail = registerUserRequest.email().toLowerCase().trim();
 
         if (userRepository.existsByEmail(normalizedEmail)) {
+            log.info("User with email {} already exists", normalizedEmail);
             throw new UserAlreadyExistException();
         }
 
@@ -67,6 +67,8 @@ public class UserServiceImpl implements UserService {
         if (registerUserRequest.avatarUrl() != null && !registerUserRequest.avatarUrl().isBlank()) {
             profile.setAvatarUrl(registerUserRequest.avatarUrl());
         }
+        profile.setAvatarUrl("");
+
         //3. set profile user
         profile.setUser(newUser);
 
@@ -120,10 +122,11 @@ public class UserServiceImpl implements UserService {
                 });
 
         user.setRole(adminRole);
-        profile.setFirstname("admin");
+        profile.setFirstname("Admin");
         profile.setLastname("Administrator");
         profile.setDescription("Default administrator account. " +
                 "Deactivate this account after creating a personal admin user.");
+        profile.setAvatarUrl("");
 
         profile.setUser(user);
         user.setProfile(profile);
@@ -169,7 +172,10 @@ public class UserServiceImpl implements UserService {
 
         // find user first
         User updatedUser = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> {
+                    log.error("User not found in database! UserId: {}", userId);
+                    return new UserNotFoundException();
+                });
 
         UserProfile updatedProfile = updatedUser.getProfile();
 
@@ -187,11 +193,15 @@ public class UserServiceImpl implements UserService {
             userIsChanged = true;
             updatedProfile.setDescription(updateUserDto.description());
         }
-        // not implemented for now in create write empty string ""
-//        if (!updatedProfile.getAvatarUrl().equals(updateUserDto.avatarUrl())) {
-//            userIsChanged = true;
-//            updatedProfile.setAvatarUrl(updateUserDto.avatarUrl());
-//        }
+
+        // not implemented for now
+        if (!(updatedProfile.getAvatarUrl() == null) && !updatedProfile.getAvatarUrl().equals(updateUserDto.avatarUrl())) {
+            userIsChanged = true;
+            updatedProfile.setAvatarUrl(updateUserDto.avatarUrl());
+        } else if (updatedProfile.getAvatarUrl() == null && !(updateUserDto.avatarUrl() == null) ) {
+            userIsChanged = true;
+            updatedProfile.setAvatarUrl(updateUserDto.avatarUrl());
+        }
 
         if(!updatedUser.getEmail().equals(updateUserDto.email())) {
             userIsChanged = true;
@@ -200,7 +210,11 @@ public class UserServiceImpl implements UserService {
 
         if (!updatedUser.getRole().getId().equals(updateUserDto.roleId())){
             userIsChanged = true;
-            Role newRole = roleRepository.getById(updateUserDto.roleId());
+            Role newRole = roleRepository.findById(updateUserDto.roleId())
+                    .orElseThrow(() -> {
+                        log.error("Role did not found in database! RoleId: {}", updateUserDto.roleId());
+                        return new RoleNotExistException();
+                    });
             updatedUser.setRole(newRole);
         }
 
