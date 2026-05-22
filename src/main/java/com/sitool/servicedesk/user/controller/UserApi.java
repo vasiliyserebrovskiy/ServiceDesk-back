@@ -2,6 +2,7 @@ package com.sitool.servicedesk.user.controller;
 
 import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.request.UpdateUserDto;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -147,4 +147,29 @@ public interface UserApi {
             )
             @PathVariable UUID userId
     );
+
+    @Operation(
+            summary = "Update user",
+            description = "Updates editable information for the specified userId (UUID)."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = UserDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request data or UUID format"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
+    @PatchMapping("{userId}")
+    UserDto updateUser(@PathVariable UUID userId, @RequestBody UpdateUserDto updateUserDto);
 }
