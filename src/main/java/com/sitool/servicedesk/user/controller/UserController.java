@@ -1,6 +1,7 @@
 package com.sitool.servicedesk.user.controller;
 
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.request.UpdateUserDto;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,11 @@ public class UserController implements UserApi {
     @Override
     public UserDto getUser(UUID userId) {
         return userService.getUser(userId);
+    }
+
+    @Override
+    public UserDto updateUser(UUID userId, UpdateUserDto updateUserDto) {
+        return userService.updateUser(userId, updateUserDto);
     }
 
 

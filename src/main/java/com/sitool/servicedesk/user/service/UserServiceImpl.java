@@ -4,6 +4,7 @@ import com.sitool.servicedesk.role.entity.Role;
 import com.sitool.servicedesk.role.exceptions.RoleNotExistException;
 import com.sitool.servicedesk.role.repository.RoleRepository;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.request.UpdateUserDto;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.entity.User;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
@@ -152,6 +153,71 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException::new);
 
         return userMapper.toDto(user);
+    }
+
+    /**
+     * Applies partial updates to an existing user and returns the updated representation.
+     *
+     * @param userId identifier of the user to be updated
+     * @param updateUserDto DTO containing fields to update
+     * @return updated user DTO after persistence
+     */
+    @Override
+    public UserDto updateUser(UUID userId, UpdateUserDto updateUserDto) {
+
+        boolean userIsChanged = false;
+
+        // find user first
+        User updatedUser = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        UserProfile updatedProfile = updatedUser.getProfile();
+
+        if (!updatedProfile.getFirstname().equals(updateUserDto.firstname())) {
+            userIsChanged = true;
+            updatedProfile.setFirstname(updateUserDto.firstname());
+        }
+
+        if (!updatedProfile.getLastname().equals(updateUserDto.lastname())) {
+            userIsChanged = true;
+            updatedProfile.setLastname(updateUserDto.lastname());
+        }
+
+        if (!updatedProfile.getDescription().equals(updateUserDto.description())) {
+            userIsChanged = true;
+            updatedProfile.setDescription(updateUserDto.description());
+        }
+        // not implemented for now in create write empty string ""
+//        if (!updatedProfile.getAvatarUrl().equals(updateUserDto.avatarUrl())) {
+//            userIsChanged = true;
+//            updatedProfile.setAvatarUrl(updateUserDto.avatarUrl());
+//        }
+
+        if(!updatedUser.getEmail().equals(updateUserDto.email())) {
+            userIsChanged = true;
+            updatedUser.setEmail(updateUserDto.email());
+        }
+
+        if (!updatedUser.getRole().getId().equals(updateUserDto.roleId())){
+            userIsChanged = true;
+            Role newRole = roleRepository.getById(updateUserDto.roleId());
+            updatedUser.setRole(newRole);
+        }
+
+        if (updatedUser.isActive() !=  updateUserDto.isActive()) {
+            userIsChanged = true;
+            updatedUser.setActive(updateUserDto.isActive());
+        }
+
+        if (updatedUser.isBlocked() != updateUserDto.isBlocked()) {
+            userIsChanged = true;
+            updatedUser.setBlocked(updateUserDto.isBlocked());
+        }
+
+        if (userIsChanged) {
+            userRepository.save(updatedUser);
+        }
+        return userMapper.toDto(updatedUser);
     }
 
 
