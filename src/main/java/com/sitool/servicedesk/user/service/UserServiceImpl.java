@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -189,16 +190,13 @@ public class UserServiceImpl implements UserService {
             updatedProfile.setLastname(updateUserDto.lastname());
         }
 
-        if (!updatedProfile.getDescription().equals(updateUserDto.description())) {
+        if (!Objects.equals(updatedProfile.getDescription(),updateUserDto.description())) {
             userIsChanged = true;
             updatedProfile.setDescription(updateUserDto.description());
         }
 
         // not implemented for now
-        if (!(updatedProfile.getAvatarUrl() == null) && !updatedProfile.getAvatarUrl().equals(updateUserDto.avatarUrl())) {
-            userIsChanged = true;
-            updatedProfile.setAvatarUrl(updateUserDto.avatarUrl());
-        } else if (updatedProfile.getAvatarUrl() == null && !(updateUserDto.avatarUrl() == null) ) {
+        if (!Objects.equals(updatedProfile.getAvatarUrl(), updateUserDto.avatarUrl())) {
             userIsChanged = true;
             updatedProfile.setAvatarUrl(updateUserDto.avatarUrl());
         }

@@ -1,8 +1,11 @@
 package com.sitool.servicedesk.user.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sitool.servicedesk.user.constraints.UserValidationConstants;
+import com.sitool.servicedesk.user.validation.ValidCustomEmail;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
 
@@ -27,6 +30,8 @@ public record UpdateUserDto(
         @NotBlank(message = "{user.lastnamename.notBlank}")
         String lastname,
         @NotBlank(message = "{user.email.notBlank}")
+        @Size(min= UserValidationConstants.EMAIL_MIN_LENGTH, max=UserValidationConstants.EMAIL_MAX_LENGTH, message="{user.email.length}")
+        @ValidCustomEmail(message = "{user.email.validation}")
         String email,
         @JsonProperty("roleId")
         @NotNull(message = "{user.role.notNull}")
