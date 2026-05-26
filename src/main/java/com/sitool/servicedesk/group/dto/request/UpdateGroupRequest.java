@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 public record UpdateGroupRequest(
-        @NotNull(message = "{group.userGroupId.notNull}")
-        @JsonProperty("userGroupId")
-        UserGroupId userGroupId,
         @NotBlank(message = "{group.name.notBlank}")
         @Size(min = GroupValidationConstants.NAME_MIN_LENGTH, max = GroupValidationConstants.NAME_MAX_LENGTH, message="{group.name.length}")
         String name,

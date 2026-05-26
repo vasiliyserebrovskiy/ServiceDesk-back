@@ -4,6 +4,7 @@ import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
 import com.sitool.servicedesk.group.dto.request.CreateGroupRequest;
 import com.sitool.servicedesk.group.dto.request.UpdateGroupRequest;
 import com.sitool.servicedesk.group.dto.response.GroupDto;
+import com.sitool.servicedesk.user.dto.response.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -62,12 +63,75 @@ public interface GroupApi {
     @PostMapping("/create")
     GroupDto createGroup(@Valid @RequestBody CreateGroupRequest createGroupRequest);
 
+    @Operation(
+            summary = "Update group",
+            description = "Updates editable information for the specified groupId (UUID)."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Group updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GroupDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request data or UUID format"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Group not found"
+            )
+    })
     @PatchMapping("/{groupId}")
-    GroupDto updateGroup(@Valid @PathVariable UUID groupId, @RequestBody UpdateGroupRequest updateGroupRequest);
+    GroupDto updateGroup(@PathVariable UUID groupId, @Valid @RequestBody UpdateGroupRequest updateGroupRequest);
 
+    @Operation(
+            summary = "Get group by id",
+            description = "Returns group information for the specified groupId (UUID)."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Group вудуеув successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid UUID format"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Group not found"
+            )
+    })
     @DeleteMapping("/{groupId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteGroup(@PathVariable UUID groupId);
 
+    @Operation(
+            summary = "Get group by id",
+            description = "Returns group information for the specified groupId (UUID)."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Group retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GroupDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid UUID format"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Group not found"
+            )
+    })
     @GetMapping("/{groupId}")
     GroupDto getGroup(@PathVariable UUID groupId);
 

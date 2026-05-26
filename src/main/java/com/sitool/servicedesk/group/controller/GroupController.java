@@ -13,30 +13,31 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 public class GroupController implements GroupApi {
+
     private final GroupService groupService;
+
     @Override
     public GroupDto createGroup(CreateGroupRequest createGroupRequest) {
-//        System.out.println(createGroupRequest);
         return groupService.createGroup(createGroupRequest);
     }
 
     @Override
     public GroupDto updateGroup(UUID groupId, UpdateGroupRequest updateGroupRequest) {
-        return null;
+        return groupService.updateGroup(groupId, updateGroupRequest);
     }
 
     @Override
     public void deleteGroup(UUID groupId) {
-
+        groupService.deleteGroup(groupId);
     }
 
     @Override
     public GroupDto getGroup(UUID groupId) {
-        return null;
+        return groupService.getGroup(groupId);
     }
 
     @Override
     public List<GroupDto> getAllGroups() {
-        return List.of();
+        return groupService.getAllGroups();
     }
 }
