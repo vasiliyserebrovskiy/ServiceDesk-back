@@ -1,13 +1,17 @@
 package com.sitool.servicedesk.group.entity;
 
+import com.sitool.servicedesk.usergroup.entity.UserGroup;
 import com.sitool.servicedesk.utils.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * Entity representing a user group.
@@ -39,6 +43,9 @@ public class Group extends BaseEntity {
      */
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "group")
+    private List<UserGroup> userGroups;
 
     /**
      * Returns string representation of the group entity.

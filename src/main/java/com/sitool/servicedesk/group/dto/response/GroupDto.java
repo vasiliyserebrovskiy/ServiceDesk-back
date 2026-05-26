@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public record GroupDto(
-        UserGroupId userGroupId,
+        UUID id,
         String name,
         String description,
         List<UUID> userIds
