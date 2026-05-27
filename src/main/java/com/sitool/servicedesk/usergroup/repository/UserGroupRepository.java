@@ -10,7 +10,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Repository for managing {@link UserGroup} relationships.
+ * Provides access to user-group mapping operations.
+ */
 public interface UserGroupRepository extends JpaRepository<UserGroup, UserGroupId> {
+    /**
+     * Retrieves all user IDs assigned to a specific group.
+     *
+     * @param groupId group identifier
+     * @return list of user IDs in the group
+     */
     @Query("""
                 select ug.user.id
                 from UserGroup ug
@@ -18,6 +28,12 @@ public interface UserGroupRepository extends JpaRepository<UserGroup, UserGroupI
             """)
     List<UUID> findUserIdsByGroupId(UUID groupId);
 
+    /**
+     * Removes selected users from a group.
+     *
+     * @param groupId group identifier
+     * @param userIds set of user IDs to remove
+     */
     @Modifying
     @Query("""
                 DELETE FROM UserGroup ug

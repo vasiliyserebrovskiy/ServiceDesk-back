@@ -1,15 +1,18 @@
 package com.sitool.servicedesk.group.constraints;
 
+/**
+ * Validation constraints for group fields.
+ */
 public final class GroupValidationConstants {
     private GroupValidationConstants() {}
 
     /**
-     * Group name minimum length
+     *  Minimum allowed length for a group name.
      */
     public static final int NAME_MIN_LENGTH = 2;
 
     /**
-     * Group name maximum length
+     * Maximum allowed length for a group name.
      */
     public static final int NAME_MAX_LENGTH = 200;
 }

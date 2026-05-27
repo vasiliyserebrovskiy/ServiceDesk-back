@@ -20,6 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+/**
+ * Service implementation for managing groups.
+ * <p>
+ * Handles creation, update, deletion, and retrieval of groups,
+ * including management of user-group relationships.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,10 +36,17 @@ public class GroupServiceImpl implements GroupService {
     private final UserGroupRepository userGroupRepository;
     private final GroupMapper groupMapper;
 
+    /**
+     * Creates a new group and assigns users to it.
+     *
+     * @param request group creation data including name, description and user IDs
+     * @return created group as DTO
+     * @throws GroupAlreadyExistException if group name already exists
+     */
     @Override
     @Transactional
-    public GroupDto createGroup(CreateGroupRequest createGroupRequest) {
-        String normalizedName = createGroupRequest.name().trim();
+    public GroupDto createGroup(CreateGroupRequest request) {
+        String normalizedName = request.name().trim();
         if(groupRepository.existsByNameIgnoreCase(normalizedName)) {
             log.info("createGroup: Group with name {} already exists", normalizedName);
             throw new GroupAlreadyExistException();
@@ -42,11 +55,11 @@ public class GroupServiceImpl implements GroupService {
         // Create new group
         Group newGroup = new Group();
         newGroup.setName(normalizedName);
-        newGroup.setDescription(createGroupRequest.description());
+        newGroup.setDescription(request.description());
 
         groupRepository.save(newGroup);
 
-        List<User> users = userRepository.findAllById(createGroupRequest.userIds());
+        List<User> users = userRepository.findAllById(request.userIds());
 
         // Save UserGroups records
         List<UserGroup> links = new ArrayList<>();
@@ -68,10 +81,19 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.groupToGroupDto(newGroup, userIds);
     }
 
+    /**
+     * Updates an existing group and synchronizes its user assignments.
+     *
+     * @param groupId group identifier
+     * @param request updated group data
+     * @return updated group as DTO
+     * @throws GroupNotFoundException if group is not found
+     * @throws GroupAlreadyExistException if updated name conflicts with existing group
+     */
     @Override
     @Transactional
-    public GroupDto updateGroup(UUID groupId, UpdateGroupRequest updateGroupRequest) {
-        String normalizedName = updateGroupRequest.name().trim();
+    public GroupDto updateGroup(UUID groupId, UpdateGroupRequest request) {
+        String normalizedName = request.name().trim();
 
         Group currentGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             log.error("updateGroup: Group with id {} not found", groupId);
@@ -87,12 +109,12 @@ public class GroupServiceImpl implements GroupService {
             currentGroup.setName(normalizedName);
         }
 
-        if (!Objects.equals(currentGroup.getDescription(), updateGroupRequest.description())) {
-            currentGroup.setDescription(updateGroupRequest.description());
+        if (!Objects.equals(currentGroup.getDescription(), request.description())) {
+            currentGroup.setDescription(request.description());
         }
 
         Set<UUID> currentGroupUsers = new HashSet<>(userGroupRepository.findUserIdsByGroupId(currentGroup.getId()));
-        Set<UUID> newGroupUsers = new HashSet<>(updateGroupRequest.userIds());
+        Set<UUID> newGroupUsers = new HashSet<>(request.userIds());
 
         // Users id we need to delete
         Set<UUID> usersToDelete = new HashSet<>(currentGroupUsers);
@@ -127,7 +149,14 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.groupToGroupDto(currentGroup, new ArrayList<>(newGroupUsers));
     }
 
+    /**
+     * Deletes a group by its ID.
+     *
+     * @param groupId group identifier
+     * @throws GroupNotFoundException if group is not found
+     */
     @Override
+    @Transactional
     public void deleteGroup(UUID groupId) {
         Group currentGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             log.error("deleteGroup: Group with id {} not found", groupId);
@@ -136,7 +165,15 @@ public class GroupServiceImpl implements GroupService {
         groupRepository.delete(currentGroup);
     }
 
+    /**
+     * Retrieves a group by its ID.
+     *
+     * @param groupId group identifier
+     * @return group as DTO including assigned user IDs
+     * @throws GroupNotFoundException if group is not found
+     */
     @Override
+    @Transactional(readOnly = true)
     public GroupDto getGroup(UUID groupId) {
         Group currentGroup = groupRepository.findById(groupId).orElseThrow(() -> {
             log.error("getGroup: Group with id {} not found", groupId);
@@ -148,6 +185,13 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.groupToGroupDto(currentGroup, userIds);
     }
 
+    /**
+     * Retrieves all groups with their assigned users.
+     *
+     * @return list of all groups as DTOs
+     */
+    @Override
+    @Transactional(readOnly = true)
     public List<GroupDto> getAllGroups() {
 
         List<Group> groups = groupRepository.findAll();

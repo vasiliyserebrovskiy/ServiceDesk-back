@@ -33,15 +33,11 @@ public record UpdateUserDto(
         @Size(min= UserValidationConstants.EMAIL_MIN_LENGTH, max=UserValidationConstants.EMAIL_MAX_LENGTH, message="{user.email.length}")
         @ValidCustomEmail(message = "{user.email.validation}")
         String email,
-        @JsonProperty("roleId")
         @NotNull(message = "{user.role.notNull}")
         UUID roleId,
-        @JsonProperty("isActive")
         boolean isActive,
-        @JsonProperty("isBlocked")
         boolean isBlocked,
         String description,
-        @JsonProperty("avatarUrl")
         String avatarUrl
 ) {
 }

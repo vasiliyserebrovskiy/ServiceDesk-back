@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * REST controller that delegates group operations to the GroupService.
+ */
 @RestController
 @RequiredArgsConstructor
 public class GroupController implements GroupApi {
@@ -17,13 +20,13 @@ public class GroupController implements GroupApi {
     private final GroupService groupService;
 
     @Override
-    public GroupDto createGroup(CreateGroupRequest createGroupRequest) {
-        return groupService.createGroup(createGroupRequest);
+    public GroupDto createGroup(CreateGroupRequest request) {
+        return groupService.createGroup(request);
     }
 
     @Override
-    public GroupDto updateGroup(UUID groupId, UpdateGroupRequest updateGroupRequest) {
-        return groupService.updateGroup(groupId, updateGroupRequest);
+    public GroupDto updateGroup(UUID groupId, UpdateGroupRequest request) {
+        return groupService.updateGroup(groupId, request);
     }
 
     @Override

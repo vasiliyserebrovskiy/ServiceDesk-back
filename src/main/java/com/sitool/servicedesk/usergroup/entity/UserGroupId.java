@@ -7,28 +7,17 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Composite identifier for the UserGroup entity.
+ * Composite primary key for {@link com.sitool.servicedesk.usergroup.entity.UserGroup}.
  * <p>
- * This class represents a composite primary key consisting of:
- * <ul>
- *     <li>userId — identifier of the user</li>
- *     <li>groupId — identifier of the group</li>
- * </ul>
- * <p>
- * The class is marked with {@code @Embeddable} so it can be embedded
- * into an entity as a composite key using {@code @EmbeddedId}.
+ * Represents a combination of userId and groupId used as an embedded identifier.
  */
-
 @Embeddable
 public class UserGroupId implements Serializable {
 
-    /**
-     * Identifier of the user.
-     */
+    /** User identifier. */
     private UUID userId;
-    /**
-     * Identifier of the group.
-     */
+
+    /** Group identifier. */
     private UUID groupId;
 
     protected UserGroupId() {
@@ -47,13 +36,6 @@ public class UserGroupId implements Serializable {
         return groupId;
     }
 
-    /**
-     * Compares this identifier with another object.
-     *
-     * @param o object to compare
-     * @return {@code true} if both identifiers contain the same userId and groupId,
-     * otherwise {@code false}
-     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -61,11 +43,6 @@ public class UserGroupId implements Serializable {
         return Objects.equals(userId, that.userId) && Objects.equals(groupId, that.groupId);
     }
 
-    /**
-     * Generates hash code based on userId and groupId.
-     *
-     * @return generated hash code
-     */
     @Override
     public int hashCode() {
         return Objects.hash(userId, groupId);
