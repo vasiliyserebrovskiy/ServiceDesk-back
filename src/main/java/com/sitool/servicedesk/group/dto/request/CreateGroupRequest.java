@@ -9,11 +9,17 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Request payload for creating a group.
+ */
 public record CreateGroupRequest(
         @NotBlank(message = "{group.name.notBlank}")
-        @Size(min = GroupValidationConstants.NAME_MIN_LENGTH, max = GroupValidationConstants.NAME_MAX_LENGTH, message="{group.name.length}")
+        @Size(
+                min = GroupValidationConstants.NAME_MIN_LENGTH,
+                max = GroupValidationConstants.NAME_MAX_LENGTH,
+                message="{group.name.length}"
+        )
         String name,
         String description,
-        @JsonProperty("userIds")
         List<UUID> userIds
 ) {}

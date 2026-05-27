@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Api contract for grope-related operations.
+ * API contract for group-related operations.
  */
-@Tag(name = "Group controller", description = "Controller for Group operations")
+@Tag(name = "Groups", description = "Operations related to groups")
 @RequestMapping("/api/v1/groups")
 public interface GroupApi {
 
@@ -35,7 +35,7 @@ public interface GroupApi {
                             examples = @ExampleObject(value = """
                                     {
                                       "id": "767ea865-8b32-454c-af05-52508be4033c",
-                                      "name": "Vasiliy",
+                                      "name": "Support Team",
                                       "description":"Some description",
                                       "userIds":[
                                               "3453d552-f904-4f46-91c4-6b782553b421",
@@ -53,19 +53,21 @@ public interface GroupApi {
                             array = @ArraySchema(schema = @Schema(implementation = ValidationErrorDto.class)),
                             examples = @ExampleObject(value = """
                                     [
-                                      { "field": "name": "must be a well-formed name " },
-                                      { "field": "name": "must not be blank" }
+                                      { "field": "name",
+                                        "message": "must be a well-formed name" },
+                                      { "field": "name",
+                                        "message": "must not be blank" }
                                     ]
                                     """))
             )
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/create")
+    @PostMapping
     GroupDto createGroup(@Valid @RequestBody CreateGroupRequest createGroupRequest);
 
     @Operation(
             summary = "Update group",
-            description = "Updates editable information for the specified groupId (UUID)."
+            description = "Updates editable information for the specified group."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -89,13 +91,13 @@ public interface GroupApi {
     GroupDto updateGroup(@PathVariable UUID groupId, @Valid @RequestBody UpdateGroupRequest updateGroupRequest);
 
     @Operation(
-            summary = "Get group by id",
-            description = "Returns group information for the specified groupId (UUID)."
+            summary = "Delete group",
+            description = "Deletes the group with the specified groupId (UUID)."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204",
-                    description = "Group вудуеув successfully"
+                    description = "Group deleted successfully"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -135,6 +137,18 @@ public interface GroupApi {
     @GetMapping("/{groupId}")
     GroupDto getGroup(@PathVariable UUID groupId);
 
+    @Operation(
+            summary = "Get all groups",
+            description = "Returns a list of all groups."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Groups retrieved successfully",
+            content = @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = GroupDto.class))
+            )
+    )
     @GetMapping
     List<GroupDto> getAllGroups();
 }

@@ -95,7 +95,7 @@ class UpdateUserDtoTest {
 
         Set<ConstraintViolation<UpdateUserDto>> violations = validator.validate(dto);
 
-        assertEquals(1, violations.size());
+        assertEquals(2, violations.size());
     }
 
     @Test

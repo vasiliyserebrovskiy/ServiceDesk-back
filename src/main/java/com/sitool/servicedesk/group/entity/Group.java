@@ -15,12 +15,11 @@ import java.util.List;
 
 /**
  * Entity representing a user group.
- * <p>
- * A group can be used to объединять users by roles,
- * permissions, responsibilities, or any business-related logic.
- * <p>
- * This entity extends {@link BaseEntity}, which provides
- * common fields such as identifier and audit information.
+ *
+ * Groups are used to organize users by roles, permissions,
+ * or business-specific logic.
+ *
+ * Extends BaseEntity which provides id and audit fields.
  */
 @Getter
 @Setter
@@ -34,7 +33,6 @@ public class Group extends BaseEntity {
      * <p>
      * This field cannot be null and must be unique.
      */
-    @NotNull
     @Column(name="name", nullable = false, unique = true, length = 200)
     private String name;
 

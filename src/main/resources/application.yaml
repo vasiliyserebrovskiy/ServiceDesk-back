@@ -21,7 +21,6 @@ spring:
   jackson:
     serialization:
       INDENT_OUTPUT: true
-    property-naming-strategy: SNAKE_CASE
 
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml

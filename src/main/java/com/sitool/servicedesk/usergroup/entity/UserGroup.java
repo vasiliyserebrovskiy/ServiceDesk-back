@@ -8,12 +8,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Entity representing the relationship between users and groups.
+ * Join entity representing many-to-many relationship between {@link User} and {@link Group}.
  * <p>
- * This entity maps the {@code users_groups} join table and stores
- * associations between {@link User} and {@link Group}.
- * <p>
- * A composite primary key is used through {@link UserGroupId}.
+ * Maps the {@code users_groups} table and uses a composite primary key
+ * defined in {@link UserGroupId}.
  */
 @NoArgsConstructor
 @Getter
@@ -23,16 +21,13 @@ import lombok.Setter;
 public class UserGroup {
 
     /**
-     * Composite primary key containing userId and groupId.
+     * Composite primary key (userId, groupId).
      */
     @EmbeddedId
     private UserGroupId id;
 
     /**
-     * Associated user entity.
-     * <p>
-     * The {@code userId} value from {@link UserGroupId}
-     * is mapped to this relationship using {@code @MapsId}.
+     * Associated {@link User} entity.
      */
     @ManyToOne
     @MapsId("userId")
@@ -40,10 +35,7 @@ public class UserGroup {
     private User user;
 
     /**
-     * Associated group entity.
-     * <p>
-     * The {@code groupId} value from {@link UserGroupId}
-     * is mapped to this relationship using {@code @MapsId}.
+     * Associated {@link Group} entity.
      */
     @ManyToOne
     @MapsId("groupId")
