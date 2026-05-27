@@ -87,7 +87,7 @@ class UserControllerTest {
         when(userService.createNewUser(any(RegisterUserRequest.class)))
                 .thenReturn(response);
 
-        mockMvc.perform(post("/api/v1/users/create")
+        mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -104,7 +104,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.firstname").value("Vasiliy"))
                 .andExpect(jsonPath("$.lastname").value("Serebrovskii"))
                 .andExpect(jsonPath("$.email").value("vasiliy@domain.com"))
-                .andExpect(jsonPath("$.role_id").value(roleId.toString()));
+                .andExpect(jsonPath("$.roleId").value(roleId.toString()));
 
         verify(userService).createNewUser(any(RegisterUserRequest.class));
     }
@@ -113,7 +113,7 @@ class UserControllerTest {
     @DisplayName("Should return 400 when request is invalid")
     void createNewUser_shouldReturnBadRequest_whenInvalidInput() throws Exception {
 
-        mockMvc.perform(post("/api/v1/users/create")
+        mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -156,7 +156,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.firstname").value("Vasiliy"))
                 .andExpect(jsonPath("$.lastname").value("Serebrovskii"))
                 .andExpect(jsonPath("$.email").value("vasiliy@domain.com"))
-                .andExpect(jsonPath("$.role_id").value(roleId.toString()));
+                .andExpect(jsonPath("$.roleId").value(roleId.toString()));
 
         verify(userService).getMe(any());
     }

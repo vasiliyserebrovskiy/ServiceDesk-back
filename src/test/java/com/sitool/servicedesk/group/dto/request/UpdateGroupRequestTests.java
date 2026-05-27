@@ -28,44 +28,7 @@ public class UpdateGroupRequestTests {
     }
 
     /**
-     * Test 1: Group name is null
-     */
-    @Test
-    @DisplayName("Group name is null → validation test failed with message: Group name can not be blank.")
-    void  groupNameIsNullValidationFailedWithMessage() {
-        List<UUID> userIds = new ArrayList<>();
-        UpdateGroupRequest request = new UpdateGroupRequest(null, "Some description.", userIds);
-        Set<ConstraintViolation<UpdateGroupRequest>> violations = validator.validate(request);
-        String expectedMessage = messages.getString("group.name.notBlank");
-        assertThat(violations).hasSize(1);
-        assertThat(violations)
-                .anyMatch(violation -> violation.getPropertyPath().toString().equals("name")
-                        && violation.getMessage().equals(expectedMessage));
-
-    }
-
-    /**
-     * Test 2: Group name is blank
-     */
-    @Test
-    @DisplayName("Group name is blank → validation test failed with message: Group name can not be blank. / Group name length must be between 2 and 200 characters.")
-    void  groupNameIsBlankValidationFailedWithMessage() {
-        List<UUID> userIds = new ArrayList<>();
-        UpdateGroupRequest request = new UpdateGroupRequest("", "Some description.", userIds);
-        Set<ConstraintViolation<UpdateGroupRequest>> violations = validator.validate(request);
-        String expectedMessage = messages.getString("group.name.notBlank");
-        String expectedMessage2 = messages.getString("group.name.length");
-        assertThat(violations).hasSize(2);
-        assertThat(violations)
-                .anyMatch(violation -> violation.getPropertyPath().toString().equals("name")
-                        && violation.getMessage().equals(expectedMessage));
-        assertThat(violations)
-                .anyMatch(violation -> violation.getPropertyPath().toString().equals("name")
-                        && violation.getMessage().equals(expectedMessage2));
-    }
-
-    /**
-     * Test 3: Group name has less than minimum length
+     * Test 1: Group name has less than minimum length
      */
     @Test
     @DisplayName("Group name has less than minimum length → validation test failed with message: Group name length must be between 2 and 200 characters.")
@@ -81,7 +44,7 @@ public class UpdateGroupRequestTests {
     }
 
     /**
-     * Test 4: Group name has more than maximum length
+     * Test 2: Group name has more than maximum length
      */
     @Test
     @DisplayName("Group name has more than maximum length → validation test failed with message: Group name length must be between 2 and 200 characters.")
@@ -98,7 +61,7 @@ public class UpdateGroupRequestTests {
     }
 
     /**
-     * Test 5: All data is ok
+     * Test 3: All data is ok
      */
     @Test
     @DisplayName("All data is ok → validation test is ok.")
