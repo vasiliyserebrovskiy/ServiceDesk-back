@@ -1,7 +1,10 @@
 package com.sitool.servicedesk.user.controller;
 
 import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
+import com.sitool.servicedesk.security.service.AuthUserDetails;
+import com.sitool.servicedesk.user.dto.request.ChangePasswordRequest;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.request.ResetPasswordRequest;
 import com.sitool.servicedesk.user.dto.request.UpdateUserDto;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -170,6 +173,62 @@ public interface UserApi {
                     description = "User not found"
             )
     })
-    @PatchMapping("{userId}")
+    @PatchMapping("/{userId}")
     UserDto updateUser(@PathVariable UUID userId, @Valid @RequestBody UpdateUserDto updateUserDto);
+
+    @Operation(
+            summary = "Change password",
+            description = "Allows authenticated user to change their own password."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Password changed successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request payload",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ValidationErrorDto.class)))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden - can only change own password"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
+    @PatchMapping("/{userId}/password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void changePassword(@PathVariable UUID userId, @Valid @RequestBody ChangePasswordRequest request, @AuthenticationPrincipal AuthUserDetails authUser);
+
+    @Operation(
+            summary = "Reset user password",
+            description = "Allows administrator to reset password for a specified user."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Password reset successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request payload",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ValidationErrorDto.class)))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden - admin role required"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
+    @PostMapping("/{userId}/reset-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void resetPassword(@PathVariable UUID userId, @Valid @RequestBody ResetPasswordRequest request);
 }

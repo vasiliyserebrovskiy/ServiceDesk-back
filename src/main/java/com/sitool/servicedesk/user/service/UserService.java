@@ -1,9 +1,13 @@
 package com.sitool.servicedesk.user.service;
 
+import com.sitool.servicedesk.user.dto.request.ChangePasswordRequest;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.request.ResetPasswordRequest;
 import com.sitool.servicedesk.user.dto.request.UpdateUserDto;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
+import com.sitool.servicedesk.user.exceptions.InvalidPasswordException;
+import com.sitool.servicedesk.user.exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -62,4 +66,29 @@ public interface UserService {
      * @return updated user data
      */
     UserDto updateUser(UUID userId, UpdateUserDto updateUserDto);
+
+    /**
+     * Changes the password for the specified user.
+     *
+     * <p>Requires the current password to be provided for verification
+     * before applying the change.</p>
+     *
+     * @param userId  the UUID of the user whose password is to be changed
+     * @param request the request containing the current and new passwords
+     * @throws UserNotFoundException    if no user with the given ID exists
+     * @throws InvalidPasswordException if the provided current password is incorrect
+     */
+    void changePassword(UUID userId, ChangePasswordRequest request);
+
+    /**
+     * Resets the password for the specified user.
+     *
+     * <p>Administrative operation that sets a new password without requiring
+     * the current password.</p>
+     *
+     * @param userId  the UUID of the user whose password is to be reset
+     * @param request the request containing the new password
+     * @throws UserNotFoundException if no user with the given ID exists
+     */
+    void resetPassword(UUID userId, ResetPasswordRequest request);
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Spring Security adapter for exposing application User entity
@@ -32,6 +33,8 @@ public record AuthUserDetails(User user) implements UserDetails {
     public String getUsername() {
         return user.getEmail();
     }
+
+    public UUID  getUserId() { return user.getId(); }
 
     @Override
     public boolean isAccountNonExpired() {

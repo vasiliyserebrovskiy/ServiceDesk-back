@@ -3,15 +3,18 @@ package com.sitool.servicedesk.user.service;
 import com.sitool.servicedesk.role.entity.Role;
 import com.sitool.servicedesk.role.exceptions.RoleNotExistException;
 import com.sitool.servicedesk.role.repository.RoleRepository;
+import com.sitool.servicedesk.user.dto.request.ChangePasswordRequest;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.request.ResetPasswordRequest;
 import com.sitool.servicedesk.user.dto.request.UpdateUserDto;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.entity.User;
+import com.sitool.servicedesk.user.exceptions.InvalidPasswordException;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
 import com.sitool.servicedesk.user.exceptions.UserNotFoundException;
 import com.sitool.servicedesk.user.repository.UserRepository;
 import com.sitool.servicedesk.userprofile.entity.UserProfile;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.sitool.servicedesk.user.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +90,7 @@ public class UserServiceImpl implements UserService {
      * Method for getting user information from database
      */
     @Override
+    @Transactional(readOnly=true)
     public UserDto getMe(String email) {
 
         User currentUser = userRepository.findByEmail(email)
@@ -139,6 +143,7 @@ public class UserServiceImpl implements UserService {
      * Retrieves all users from the system.
      */
     @Override
+    @Transactional(readOnly=true)
     public List<UserDto> getAllUsers() {
         return userRepository.findAll()
                 .stream()
@@ -152,6 +157,7 @@ public class UserServiceImpl implements UserService {
      * @param userId unique user UUID
      */
     @Override
+    @Transactional(readOnly=true)
     public UserDto getUser(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
@@ -167,6 +173,7 @@ public class UserServiceImpl implements UserService {
      * @return updated user DTO after persistence
      */
     @Override
+    @Transactional
     public UserDto updateUser(UUID userId, UpdateUserDto updateUserDto) {
 
         boolean userIsChanged = false;
@@ -230,6 +237,52 @@ public class UserServiceImpl implements UserService {
             userRepository.save(updatedUser);
         }
         return userMapper.toDto(updatedUser);
+    }
+
+    /**
+     * Changes the password for the specified user.
+     *
+     * <p>Verifies that the provided current password matches the stored password
+     * before applying the change. The new password is encoded before persisting.</p>
+     *
+     * @param userId  the UUID of the user whose password is to be changed
+     * @param request the request containing the current and new passwords
+     * @throws UserNotFoundException          if no user with the given ID exists
+     * @throws InvalidPasswordException       if the provided current password is incorrect
+     */
+    @Override
+    @Transactional
+    public void changePassword(UUID userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
+            log.error("Old passwords don't match!");
+            throw new InvalidPasswordException();
+        }
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+    }
+
+    /**
+     * Resets the password for the specified user.
+     *
+     * <p>Administrative operation that sets a new password without requiring
+     * the current password. Intended for use by administrators when a user
+     * has lost access to their account.</p>
+     *
+     * <p>The new password is encoded before persisting.</p>
+     *
+     * @param userId  the UUID of the user whose password is to be reset
+     * @param request the request containing the new password
+     * @throws UserNotFoundException if no user with the given ID exists
+     */
+    @Override
+    @Transactional
+    public void resetPassword(UUID userId, ResetPasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
     }
 
 
