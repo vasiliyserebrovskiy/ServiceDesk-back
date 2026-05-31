@@ -4,11 +4,15 @@ import com.sitool.servicedesk.role.entity.Role;
 
 import com.sitool.servicedesk.role.exceptions.RoleNotExistException;
 import com.sitool.servicedesk.role.repository.RoleRepository;
+import com.sitool.servicedesk.user.dto.request.ChangePasswordRequest;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.request.ResetPasswordRequest;
 import com.sitool.servicedesk.user.dto.request.UpdateUserDto;
 import com.sitool.servicedesk.user.dto.response.UserDto;
 import com.sitool.servicedesk.user.entity.User;
+import com.sitool.servicedesk.user.exceptions.InvalidPasswordException;
 import com.sitool.servicedesk.user.exceptions.UserAlreadyExistException;
+import com.sitool.servicedesk.user.exceptions.UserNotFoundException;
 import com.sitool.servicedesk.user.mapper.UserMapper;
 import com.sitool.servicedesk.user.repository.UserRepository;
 import com.sitool.servicedesk.userprofile.entity.UserProfile;
@@ -401,6 +405,97 @@ public class UserServiceImplTests {
         verify(userRepository, never()).save(any());
     }
 
+
+    @Test
+    @DisplayName("Change password → password changed successfully")
+    void shouldChangePasswordSuccessfully() {
+
+        UUID userId = UUID.randomUUID();
+
+        User user = new User();
+        user.setPassword("encodedOldPassword");
+
+        ChangePasswordRequest request = new ChangePasswordRequest("OldPassword123!", "NewPassword123!");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("OldPassword123!", "encodedOldPassword")).thenReturn(true);
+        when(passwordEncoder.encode("NewPassword123!")).thenReturn("encodedNewPassword");
+
+        userService.changePassword(userId, request);
+
+        assertEquals("encodedNewPassword", user.getPassword());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    @DisplayName("Change password → user not found → throws exception")
+    void shouldThrowExceptionWhenChangingPasswordForNonExistentUser() {
+
+        UUID userId = UUID.randomUUID();
+        ChangePasswordRequest request = new ChangePasswordRequest("OldPassword123!", "NewPassword123!");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class,
+                () -> userService.changePassword(userId, request));
+
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Change password → old password is incorrect → throws exception")
+    void shouldThrowExceptionWhenOldPasswordIsIncorrect() {
+
+        UUID userId = UUID.randomUUID();
+
+        User user = new User();
+        user.setPassword("encodedOldPassword");
+
+        ChangePasswordRequest request = new ChangePasswordRequest("WrongPassword123!", "NewPassword123!");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("WrongPassword123!", "encodedOldPassword")).thenReturn(false);
+
+        assertThrows(InvalidPasswordException.class,
+                () -> userService.changePassword(userId, request));
+
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Reset password → password reset successfully")
+    void shouldResetPasswordSuccessfully() {
+
+        UUID userId = UUID.randomUUID();
+
+        User user = new User();
+        user.setPassword("encodedOldPassword");
+
+        ResetPasswordRequest request = new ResetPasswordRequest("NewPassword123!");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode("NewPassword123!")).thenReturn("encodedNewPassword");
+
+        userService.resetPassword(userId, request);
+
+        assertEquals("encodedNewPassword", user.getPassword());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    @DisplayName("Reset password → user not found → throws exception")
+    void shouldThrowExceptionWhenResettingPasswordForNonExistentUser() {
+
+        UUID userId = UUID.randomUUID();
+        ResetPasswordRequest request = new ResetPasswordRequest("NewPassword123!");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class,
+                () -> userService.resetPassword(userId, request));
+
+        verify(userRepository, never()).save(any());
+    }
 
 
     private void setId(Object entity, UUID id) {

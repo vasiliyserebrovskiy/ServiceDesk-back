@@ -1,10 +1,15 @@
 package com.sitool.servicedesk.user.controller;
 
+import com.sitool.servicedesk.security.service.AuthUserDetails;
+import com.sitool.servicedesk.user.dto.request.ChangePasswordRequest;
 import com.sitool.servicedesk.user.dto.request.RegisterUserRequest;
+import com.sitool.servicedesk.user.dto.request.ResetPasswordRequest;
 import com.sitool.servicedesk.user.dto.request.UpdateUserDto;
 import com.sitool.servicedesk.user.dto.response.UserDto;
+import com.sitool.servicedesk.user.exceptions.PasswordChangeNotAllowedException;
 import com.sitool.servicedesk.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +50,21 @@ public class UserController implements UserApi {
     @Override
     public UserDto updateUser(UUID userId, UpdateUserDto updateUserDto) {
         return userService.updateUser(userId, updateUserDto);
+    }
+
+    @Override
+    public void changePassword(UUID userId, ChangePasswordRequest request, AuthUserDetails authUser) {
+        if (!authUser.getUserId().equals(userId)) {
+            throw new PasswordChangeNotAllowedException();
+        }
+        userService.changePassword(userId, request);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void resetPassword(UUID userId, ResetPasswordRequest request) {
+        userService.resetPassword(userId, request);
+
     }
 
 
