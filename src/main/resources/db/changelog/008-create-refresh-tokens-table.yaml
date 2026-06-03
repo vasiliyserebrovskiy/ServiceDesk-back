@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-refresh-tokens-table
+      id: 8
       author: sitool
       changes:
         - createTable:

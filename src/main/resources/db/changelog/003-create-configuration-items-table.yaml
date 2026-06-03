@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 6
+      id: 3
       author: sitool
       changes:
         - createTable:
-            tableName: categories
+            tableName: configuration_items
             columns:
               - column:
                   name: id
@@ -23,29 +23,25 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
-                  name: is_incident
-                  type: BOOLEAN
-                  defaultValueBoolean: false
+                  name: type
+                  type: VARCHAR(150)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
-                  name: is_problem
-                  type: BOOLEAN
-                  defaultValueBoolean: false
+                  name: manufacturer
+                  type: VARCHAR(150)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
-                  name: is_request
-                  type: BOOLEAN
-                  defaultValueBoolean: false
+                  name: serial_number
+                  type: VARCHAR(150)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
-                  name: is_change
-                  type: BOOLEAN
-                  defaultValueBoolean: false
+                  name: model
+                  type: VARCHAR(150)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: created_at
                   type: TIMESTAMP
