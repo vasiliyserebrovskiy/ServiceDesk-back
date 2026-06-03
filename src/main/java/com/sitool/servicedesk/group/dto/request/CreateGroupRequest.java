@@ -1,7 +1,5 @@
 package com.sitool.servicedesk.group.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import com.sitool.servicedesk.group.constraints.GroupValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
