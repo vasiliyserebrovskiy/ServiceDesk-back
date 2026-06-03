@@ -4,7 +4,7 @@ databaseChangeLog:
   - include:
       file: db/changelog/002-create-users-table.yaml
   - include:
-      file: db/changelog/003-create-ticket-types-table.yaml
+      file: db/changelog/003-create-configuration-items-table.yaml
   - include:
       file: db/changelog/004-create-groups-table.yaml
   - include:
@@ -12,10 +12,12 @@ databaseChangeLog:
   - include:
       file: db/changelog/006-create-categories-table.yaml
   - include:
-      file: db/changelog/007-create-tickets-table.yaml
+      file: db/changelog/007-create-subcategory-table.yaml
   - include:
-      file: /db/changelog/008-create-seed-data.yaml
+      file: db/changelog/008-create-refresh-tokens-table.yaml
   - include:
-      file: /db/changelog/009-create-refresh-tokens-table.yaml
+        file: db/changelog/009-create-user-profiles-table.yaml
   - include:
-        file: db/changelog/010-create-user-profiles-table.yaml
+      file: db/changelog/010-create-statuses-table.yaml
+  - include:
+      file: db/changelog/011-create-incidents-table.yaml

@@ -1,0 +1,177 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: sitool
+      changes:
+        - createSequence:
+            sequenceName: incident_number_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: incidents
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: number
+                  type: BIGINT
+                  defaultValueSequenceNext: incident_number_seq
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: requester_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subcategory_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: impact
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: urgency
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: configuration_item_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+              - column:
+                  name: group_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+              - column:
+                  name: assignee_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+              - column:
+                  name: short_description
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: servicenow_number
+                  type: VARCHAR(150)
+                  constraints:
+                    unique: true
+                    nullable: true
+              - column:
+                  name: servicenow_synced
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: servicenow_synced_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: incidents
+            baseColumnNames: requester_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_users_incidents_requester
+        - addForeignKeyConstraint:
+            baseTableName: incidents
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_categories_incidents_category
+        - addForeignKeyConstraint:
+            baseTableName: incidents
+            baseColumnNames: subcategory_id
+            referencedTableName: subcategories
+            referencedColumnNames: id
+            constraintName: fk_subcategories_incidents_subcategory
+        - addForeignKeyConstraint:
+            baseTableName: incidents
+            baseColumnNames: status_id
+            referencedTableName: statuses
+            referencedColumnNames: id
+            constraintName: fk_statuses_incidents_status
+        - addForeignKeyConstraint:
+            baseTableName: incidents
+            baseColumnNames: configuration_item_id
+            referencedTableName: configuration_items
+            referencedColumnNames: id
+            constraintName: fk_configuration_items_incidents_ci
+        - addForeignKeyConstraint:
+            baseTableName: incidents
+            baseColumnNames: group_id
+            referencedTableName: groups
+            referencedColumnNames: id
+            constraintName: fk_groups_incidents_group
+        - addForeignKeyConstraint:
+            baseTableName: incidents
+            baseColumnNames: assignee_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_users_incidents_assignee
+
+        - createIndex:
+            indexName: idx_incidents_status_id
+            tableName: incidents
+            columns:
+              - column:
+                  name: status_id
+        - createIndex:
+            indexName: idx_incidents_assignee_id
+            tableName: incidents
+            columns:
+              - column:
+                  name: assignee_id
+        - createIndex:
+            indexName: idx_incidents_requester_id
+            tableName: incidents
+            columns:
+              - column:
+                  name: requester_id

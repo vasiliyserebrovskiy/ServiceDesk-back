@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-user-profiles-table
+      id: 9
       author: sitool
 
       changes:

@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 6
+      id: 10
       author: sitool
       changes:
         - createTable:
-            tableName: categories
+            tableName: statuses
             columns:
               - column:
                   name: id
@@ -17,6 +17,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
+                    unique: true
               - column:
                   name: description
                   type: TEXT
@@ -42,6 +43,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: is_change
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_task
                   type: BOOLEAN
                   defaultValueBoolean: false
                   constraints:
