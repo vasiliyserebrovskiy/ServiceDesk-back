@@ -3,7 +3,6 @@ package com.sitool.servicedesk.category.controller;
 import com.sitool.servicedesk.category.dto.request.CreateCategoryRequest;
 import com.sitool.servicedesk.category.dto.request.UpdateCategoryRequest;
 import com.sitool.servicedesk.category.dto.responce.CategoryDto;
-import com.sitool.servicedesk.category.entity.Category;
 import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * API contract for categoru-related operations.
+ * API contract for category-related operations.
  */
 @Tag(name = "Categories", description = "Operations related to categories")
 @RequestMapping("/api/v1/categories")
@@ -85,7 +84,7 @@ public interface CategoryApi {
                     description = "Category not found"
             )
     })
-    @PatchMapping("/{categoryId}")
+    @PutMapping("/{categoryId}")
     CategoryDto updateCategory(@PathVariable UUID categoryId, @RequestBody UpdateCategoryRequest request);
 
     @Operation(
@@ -148,12 +147,7 @@ public interface CategoryApi {
             )
     )
     @GetMapping
-    List<Category> getAllCategories();
+    List<CategoryDto> getAllCategories(@RequestParam(required = false) String type);
 
-    //TODO: Here we need to create methods to retrieve categories for incidents
-
-    /*
-     * Problem, Request, Change did not implemented yet!
-     */
 
 }

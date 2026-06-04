@@ -5,6 +5,7 @@ import com.sitool.servicedesk.group.dto.request.UpdateGroupRequest;
 import com.sitool.servicedesk.group.dto.response.GroupDto;
 import com.sitool.servicedesk.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,16 +21,19 @@ public class GroupController implements GroupApi {
     private final GroupService groupService;
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public GroupDto createGroup(CreateGroupRequest request) {
         return groupService.createGroup(request);
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public GroupDto updateGroup(UUID groupId, UpdateGroupRequest request) {
         return groupService.updateGroup(groupId, request);
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void deleteGroup(UUID groupId) {
         groupService.deleteGroup(groupId);
     }

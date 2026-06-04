@@ -3,9 +3,9 @@ package com.sitool.servicedesk.category.controller;
 import com.sitool.servicedesk.category.dto.request.CreateCategoryRequest;
 import com.sitool.servicedesk.category.dto.request.UpdateCategoryRequest;
 import com.sitool.servicedesk.category.dto.responce.CategoryDto;
-import com.sitool.servicedesk.category.entity.Category;
-import com.sitool.servicedesk.category.repository.CategoryRepository;
+import com.sitool.servicedesk.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,31 +17,34 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 public class CategoryController implements CategoryApi {
-    private final CategoryRepository categoryRepository;
 
+    private final CategoryService categoryService;
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public CategoryDto createCategory(CreateCategoryRequest request) {
-        return null;
+        return categoryService.createCategory(request);
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public CategoryDto updateCategory(UUID categoryId, UpdateCategoryRequest request) {
-        return null;
+        return categoryService.updateCategory(categoryId, request);
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void deleteCategory(UUID categoryId) {
-
+        categoryService.deleteCategory(categoryId);
     }
 
     @Override
     public CategoryDto getCategory(UUID categoryId) {
-        return null;
+        return categoryService.getCategory(categoryId);
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return List.of();
+    public List<CategoryDto> getAllCategories(String type) {
+        return categoryService.getAllCategories(type);
     }
 }

@@ -9,8 +9,8 @@ public record CategoryDto(
         UUID id,
         String name,
         String description,
-        String isIncident,
-        String isProblem,
-        String isRequest,
-        String isChange
+        Boolean isIncident,
+        Boolean isProblem,
+        Boolean isRequest,
+        Boolean isChange
 ) {}

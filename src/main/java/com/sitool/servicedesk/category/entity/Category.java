@@ -43,16 +43,16 @@ public class Category extends BaseEntity {
     private String description;
 
     @Column(name = "is_incident", nullable = false)
-    private boolean isIncident;
+    private Boolean isIncident;
 
     @Column(name = "is_problem", nullable = false)
-    private boolean isProblem;
+    private Boolean isProblem;
 
     @Column(name = "is_request", nullable = false)
-    private boolean isRequest;
+    private Boolean isRequest;
 
     @Column(name = "is_change", nullable = false)
-    private boolean isChange;
+    private Boolean isChange;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
@@ -61,4 +61,18 @@ public class Category extends BaseEntity {
     @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Override
+    public String toString() {
+        return "Category {" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", isIncident=" + isIncident +
+                ", isProblem=" + isProblem +
+                ", isRequest=" + isRequest +
+                ", isChange=" + isChange +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
