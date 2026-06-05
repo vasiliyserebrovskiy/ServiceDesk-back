@@ -13,9 +13,9 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Validation tests for GroupCreateRequest
+ * Validation tests for CreateGroupRequest
  */
-@DisplayName("GroupCreateRequest class validation tests.")
+@DisplayName("CreateGroupRequest class validation tests.")
 public class CreateGroupRequestTests {
     private static Validator validator;
     private static ResourceBundle messages;
@@ -102,7 +102,7 @@ public class CreateGroupRequestTests {
      */
     @Test
     @DisplayName("All data is ok → validation test is ok.")
-    public void CreateGroupRequestIsOk5() {
+    void createGroupRequestIsOk5() {
         List<UUID> userIds = new ArrayList<>();
         CreateGroupRequest request = new CreateGroupRequest( "Some name", "Some description", userIds);
         Set<ConstraintViolation<CreateGroupRequest>> violations = validator.validate(request);

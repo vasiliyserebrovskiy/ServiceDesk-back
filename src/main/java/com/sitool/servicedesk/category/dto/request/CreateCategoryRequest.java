@@ -3,6 +3,7 @@ package com.sitool.servicedesk.category.dto.request;
 
 import com.sitool.servicedesk.category.constraints.CategoryValidationConstants;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -17,8 +18,15 @@ public record CreateCategoryRequest(
         )
         String name,
         String description,
-        boolean isIncident,
-        boolean isProblem,
-        boolean isRequest,
-        boolean isChange
+        @NotNull(message = "{category.isIncident.notNull}")
+        Boolean isIncident,
+
+        @NotNull(message = "{category.isProblem.notNull}")
+        Boolean isProblem,
+
+        @NotNull(message = "{category.isRequest.notNull}")
+        Boolean isRequest,
+
+        @NotNull(message = "{category.isChange.notNull}")
+        Boolean isChange
 ) {}

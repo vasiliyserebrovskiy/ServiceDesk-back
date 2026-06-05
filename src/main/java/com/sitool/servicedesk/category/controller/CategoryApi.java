@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +61,7 @@ public interface CategoryApi {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    CategoryDto createCategory(@RequestBody CreateCategoryRequest request);
+    CategoryDto createCategory(@Valid @RequestBody CreateCategoryRequest request);
 
     @Operation(
             summary = "Update category",
@@ -85,7 +86,7 @@ public interface CategoryApi {
             )
     })
     @PutMapping("/{categoryId}")
-    CategoryDto updateCategory(@PathVariable UUID categoryId, @RequestBody UpdateCategoryRequest request);
+    CategoryDto updateCategory(@PathVariable UUID categoryId,@Valid @RequestBody UpdateCategoryRequest request);
 
     @Operation(
             summary = "Delete category",
