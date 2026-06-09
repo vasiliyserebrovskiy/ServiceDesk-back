@@ -70,7 +70,7 @@ public interface CategoryApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Group updated successfully",
+                    description = "Category updated successfully",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = CategoryDto.class)
@@ -90,7 +90,7 @@ public interface CategoryApi {
 
     @Operation(
             summary = "Delete category",
-            description = "Deletes the category with the specified groupId (UUID)."
+            description = "Deletes the category with the specified categoryId (UUID)."
     )
     @ApiResponses(value = {
             @ApiResponse(
