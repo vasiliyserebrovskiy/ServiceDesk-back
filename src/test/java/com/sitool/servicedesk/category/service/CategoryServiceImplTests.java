@@ -2,7 +2,7 @@ package com.sitool.servicedesk.category.service;
 
 import com.sitool.servicedesk.category.dto.request.CreateCategoryRequest;
 import com.sitool.servicedesk.category.dto.request.UpdateCategoryRequest;
-import com.sitool.servicedesk.category.dto.responce.CategoryDto;
+import com.sitool.servicedesk.category.dto.response.CategoryDto;
 import com.sitool.servicedesk.category.entity.Category;
 import com.sitool.servicedesk.category.exceptions.CategoryAlreadyExistException;
 import com.sitool.servicedesk.category.exceptions.CategoryNotFoundException;

@@ -2,7 +2,7 @@ package com.sitool.servicedesk.category.controller;
 
 import com.sitool.servicedesk.category.dto.request.CreateCategoryRequest;
 import com.sitool.servicedesk.category.dto.request.UpdateCategoryRequest;
-import com.sitool.servicedesk.category.dto.responce.CategoryDto;
+import com.sitool.servicedesk.category.dto.response.CategoryDto;
 import com.sitool.servicedesk.category.service.CategoryService;
 import com.sitool.servicedesk.security.service.CustomUserDetailsService;
 import com.sitool.servicedesk.security.service.JwtTokenService;

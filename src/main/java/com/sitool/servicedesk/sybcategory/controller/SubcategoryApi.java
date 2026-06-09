@@ -1,9 +1,9 @@
-package com.sitool.servicedesk.category.controller;
+package com.sitool.servicedesk.sybcategory.controller;
 
-import com.sitool.servicedesk.category.dto.request.CreateCategoryRequest;
-import com.sitool.servicedesk.category.dto.request.UpdateCategoryRequest;
-import com.sitool.servicedesk.category.dto.response.CategoryDto;
 import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
+import com.sitool.servicedesk.sybcategory.dto.request.CreateSubcategoryRequest;
+import com.sitool.servicedesk.sybcategory.dto.request.UpdateSubcategoryRequest;
+import com.sitool.servicedesk.sybcategory.dto.response.SubcategoryDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,31 +20,29 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * API contract for category-related operations.
+ * API contract for subcategory-related operations.
  */
-@Tag(name = "Categories", description = "Operations related to categories")
-@RequestMapping("/api/v1/categories")
-public interface CategoryApi {
-    @Operation(summary = "Register new category", description = "Creates a new category record.")
+@Tag(name = "Subcategories", description = "Operations related to subcategories")
+@RequestMapping("/api/v1/subcategories")
+public interface SubcategoryApi {
+
+    @Operation(summary = "Register new subcategory", description = "Creates a new subcategory record.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Category created successfully",
+            @ApiResponse(responseCode = "201", description = "Subcategory created successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CategoryDto.class),
+                            schema = @Schema(implementation = SubcategoryDto.class),
                             examples = @ExampleObject(value = """
                                     {
                                       "id": "767ea865-8b32-454c-af05-52508be4033c",
-                                      "name": "Hardware",
-                                      "description":"Hardware category for incidents",
-                                      "isIncident":true,
-                                      "isProblem":false,
-                                      "isRequest":false,
-                                      "isChange":false
+                                      "name": "CPU",
+                                      "description":"CPU subcategory",
+                                      "categoryId":"a37282e7-3279-4583-8699-48db9e65fd4d"
                                     }
                                     """))
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Category already exists"
+                    description = "Subcategory already exists"
             ),
             @ApiResponse(responseCode = "400", description = "Invalid request payload",
                     content = @Content(mediaType = "application/json",
@@ -61,19 +59,19 @@ public interface CategoryApi {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    CategoryDto createCategory(@Valid @RequestBody CreateCategoryRequest request);
+    SubcategoryDto  createSubcategory(@Valid @RequestBody CreateSubcategoryRequest request);
 
     @Operation(
-            summary = "Update category",
-            description = "Updates editable information for the specified category."
+            summary = "Update subcategory",
+            description = "Updates editable information for the specified subcategory."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Category updated successfully",
+                    description = "Subcategory updated successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = CategoryDto.class)
+                            schema = @Schema(implementation = SubcategoryDto.class)
                     )
             ),
             @ApiResponse(
@@ -82,20 +80,20 @@ public interface CategoryApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Category not found"
+                    description = "Subcategory not found"
             )
     })
-    @PutMapping("/{categoryId}")
-    CategoryDto updateCategory(@PathVariable UUID categoryId,@Valid @RequestBody UpdateCategoryRequest request);
+    @PutMapping("/{subcategoryId}")
+    SubcategoryDto updateSubcategory(@PathVariable UUID subcategoryId, @Valid @RequestBody UpdateSubcategoryRequest request);
 
     @Operation(
-            summary = "Delete category",
-            description = "Deletes the category with the specified categoryId (UUID)."
+            summary = "Delete subcategory",
+            description = "Deletes the subcategory with the specified subcategoryId (UUID)."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204",
-                    description = "Category deleted successfully"
+                    description = "Subcategory deleted successfully"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -106,21 +104,21 @@ public interface CategoryApi {
                     description = "Category not found"
             )
     })
-    @DeleteMapping("/{categoryId}")
+    @DeleteMapping("/{subcategoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteCategory(@PathVariable UUID categoryId);
+    void deleteSubcategory(@PathVariable UUID subcategoryId);
 
     @Operation(
-            summary = "Get category by id",
-            description = "Returns category information for the specified categoryId (UUID)."
+            summary = "Get subcategory by id",
+            description = "Returns subcategory information for the specified subcategoryId (UUID)."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Category retrieved successfully",
+                    description = "Subcategory retrieved successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = CategoryDto.class)
+                            schema = @Schema(implementation = SubcategoryDto.class)
                     )
             ),
             @ApiResponse(
@@ -129,26 +127,25 @@ public interface CategoryApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Category not found"
+                    description = "Subcategory not found"
             )
     })
-    @GetMapping("/{categoryId}")
-    CategoryDto getCategory(@PathVariable UUID categoryId);
+    @GetMapping("/{subcategoryId}")
+    SubcategoryDto getSubcategoryById(@PathVariable UUID subcategoryId);
 
     @Operation(
-            summary = "Get all categories",
-            description = "Returns a list of all categories."
+            summary = "Get all subcategories",
+            description = "Returns a list of all subcategories."
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Categories retrieved successfully",
+            description = "Subcategories retrieved successfully",
             content = @Content(
                     mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = CategoryDto.class))
+                    array = @ArraySchema(schema = @Schema(implementation = SubcategoryDto.class))
             )
     )
     @GetMapping
-    List<CategoryDto> getAllCategories(@RequestParam(required = false) String type);
-
+    List<SubcategoryDto> getAllSubcategories(@RequestParam(required = false) UUID categoryId);
 
 }

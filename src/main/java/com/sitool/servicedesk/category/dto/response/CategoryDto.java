@@ -1,4 +1,4 @@
-package com.sitool.servicedesk.category.dto.responce;
+package com.sitool.servicedesk.category.dto.response;
 
 import java.util.UUID;
 
