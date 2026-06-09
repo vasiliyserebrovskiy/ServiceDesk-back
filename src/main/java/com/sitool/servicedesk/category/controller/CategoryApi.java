@@ -2,7 +2,7 @@ package com.sitool.servicedesk.category.controller;
 
 import com.sitool.servicedesk.category.dto.request.CreateCategoryRequest;
 import com.sitool.servicedesk.category.dto.request.UpdateCategoryRequest;
-import com.sitool.servicedesk.category.dto.responce.CategoryDto;
+import com.sitool.servicedesk.category.dto.response.CategoryDto;
 import com.sitool.servicedesk.exceptions.handling.response.ValidationErrorDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

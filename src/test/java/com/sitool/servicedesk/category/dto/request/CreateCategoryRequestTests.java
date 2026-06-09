@@ -63,7 +63,7 @@ public class CreateCategoryRequestTests {
     }
 
     /**
-     * Test 3: Category name is null
+     * Test 3: Category name is less then min length
      */
     @Test
     @DisplayName("Category name is less then min length → validation test failed with message: Category name length must be between 2 and 255 characters.")
