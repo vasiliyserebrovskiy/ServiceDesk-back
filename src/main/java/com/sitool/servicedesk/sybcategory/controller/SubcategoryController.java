@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * REST controller that delegates subcategory operations to the SubcategoryService.
+ */
 @RestController
 @RequiredArgsConstructor
 public class SubcategoryController implements SubcategoryApi {

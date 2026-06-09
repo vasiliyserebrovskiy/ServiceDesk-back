@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Implementation of {@link SubcategoryService} for managing ticket subcategories.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,13 @@ public class SubcategoryServiceImpl implements SubcategoryService{
     private final CategoryRepository categoryRepository;
     private final SubcategoryMapper subcategoryMapper;
 
+    /**
+     * Creates a new subcategory.
+     *
+     * <p>Normalizes the subcategory name by trimming whitespace before saving.</p>
+     *
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public SubcategoryDto createSubcategory(CreateSubcategoryRequest request) {
@@ -50,12 +60,21 @@ public class SubcategoryServiceImpl implements SubcategoryService{
         return subcategoryMapper.sybcategoryToSubcategoryDto(subcategory);
     }
 
+    /**
+     * Updates an existing subcategory.
+     *
+     * <p>Only modified fields are persisted to avoid unnecessary database calls.
+     * If the parent category is changed, the new category is validated before updating.</p>
+     *
+     * {@inheritDoc}
+     */
     @Override
+    @Transactional
     public SubcategoryDto updateSubcategory(UUID subcategoryId, UpdateSubcategoryRequest request) {
         boolean updated = false;
         String normalizedName = request.name().trim();
 
-        Subcategory currentSubcategory = subcategoryRepository.findById(request.categoryId()).orElseThrow(() -> {
+        Subcategory currentSubcategory = subcategoryRepository.findById(subcategoryId).orElseThrow(() -> {
             log.error("updateSubcategory: Subcategory {} did not found", request.categoryId());
             return new SubcategoryNotFoundException();
         });
@@ -75,7 +94,7 @@ public class SubcategoryServiceImpl implements SubcategoryService{
             currentSubcategory.setDescription(request.description());
         }
 
-        if (currentSubcategory.getCategory().getId() != request.categoryId()) {
+        if (!currentSubcategory.getCategory().getId().equals(request.categoryId())) {
             Category newCategory = categoryRepository.findById(request.categoryId()).orElseThrow(() -> {
                 log.error("updateSubcategory: Category {} did not found", request.categoryId());
                 return new CategoryNotFoundException();
@@ -91,7 +110,13 @@ public class SubcategoryServiceImpl implements SubcategoryService{
         return subcategoryMapper.sybcategoryToSubcategoryDto(currentSubcategory);
     }
 
+    /**
+     * Deletes a subcategory by its ID.
+     *
+     * {@inheritDoc}
+     */
     @Override
+    @Transactional
     public void deleteSubcategory(UUID subcategoryId) {
         Subcategory currentSubcategory = subcategoryRepository.findById(subcategoryId).orElseThrow(() -> {
             log.error("deleteSubcategory: Subcategory {} did not found", subcategoryId);
@@ -100,7 +125,13 @@ public class SubcategoryServiceImpl implements SubcategoryService{
         subcategoryRepository.delete(currentSubcategory);
     }
 
+    /**
+     * Returns a subcategory by its ID.
+     *
+     * {@inheritDoc}
+     */
     @Override
+    @Transactional(readOnly = true)
     public SubcategoryDto getSubcategoryById(UUID subcategoryId) {
         Subcategory currentSubcategory = subcategoryRepository.findById(subcategoryId).orElseThrow(() -> {
             log.error("getSubcategory: Subcategory {} did not found", subcategoryId);
@@ -109,7 +140,15 @@ public class SubcategoryServiceImpl implements SubcategoryService{
         return subcategoryMapper.sybcategoryToSubcategoryDto(currentSubcategory);
     }
 
+    /**
+     * Returns subcategories optionally filtered by parent category.
+     *
+     * <p>If categoryId is null, all subcategories are returned.</p>
+     *
+     * {@inheritDoc}
+     */
     @Override
+    @Transactional(readOnly = true)
     public List<SubcategoryDto> getAllSubcategories(UUID categoryId) {
         if (categoryId == null) {
             return subcategoryRepository.findAll()
