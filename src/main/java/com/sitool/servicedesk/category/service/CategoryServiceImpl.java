@@ -118,7 +118,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * Deletes a category by its ID.
-     *
      * {@inheritDoc}
      */
     @Override
@@ -134,7 +133,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * Returns a category by its ID.
-     *
      * {@inheritDoc}
      */
     @Override
