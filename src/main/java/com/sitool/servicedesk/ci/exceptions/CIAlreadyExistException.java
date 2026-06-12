@@ -8,6 +8,6 @@ import org.springframework.http.HttpStatus;
  */
 public class CIAlreadyExistException extends RestApiException {
     public CIAlreadyExistException() {
-        super(HttpStatus.CONFLICT, "CI already exists");
+        super(HttpStatus.CONFLICT, "Configuration item already exists");
     }
 }

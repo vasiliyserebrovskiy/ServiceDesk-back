@@ -34,7 +34,7 @@ public class UpdateCIRequestTests {
     @Test
     @DisplayName("CI name is null → validation test failed with message: CI name can not be blank.")
     void ciNameIsNullValidationFailedWithMessage() {
-        UpdateCIRequest dto = new UpdateCIRequest(null, "some description", "Model", "ASUS","123","24D6C");
+        UpdateCIRequest dto = new UpdateCIRequest(null, "Core network switch located in server room A", "Network Equipment", "Cisco", "FCW2142L0QK", "Catalyst 9300");
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("ci.name.notBlank");
         assertThat(violations).hasSize(1);
@@ -49,7 +49,7 @@ public class UpdateCIRequestTests {
     @Test
     @DisplayName("CI name is blank → validation test failed with message: CI name can not be blank. / CI name length must be between 2 and 255 characters.")
     void ciNameIsBlankValidationFailedWithMessage() {
-        UpdateCIRequest dto = new UpdateCIRequest("", "some description", "Model", "ASUS","123","24D6C");
+        UpdateCIRequest dto = new UpdateCIRequest("", "Core network switch located in server room A", "Network Equipment", "Cisco", "FCW2142L0QK", "Catalyst 9300");
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("ci.name.notBlank");
         String expectedMessage2 = messages.getString("ci.name.length");
@@ -68,7 +68,7 @@ public class UpdateCIRequestTests {
     @Test
     @DisplayName("CI name is less then min length → validation test failed with message: CI name length must be between 2 and 255 characters.")
     void ciNameIsMinLengthValidationFailedWithMessage() {
-        UpdateCIRequest dto = new UpdateCIRequest("A", "some description", "Model", "ASUS","123","24D6C");
+        UpdateCIRequest dto = new UpdateCIRequest("A", "Core network switch located in server room A", "Network Equipment", "Cisco", "FCW2142L0QK", "Catalyst 9300");
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("ci.name.length");
         assertThat(violations).hasSize(1);
@@ -76,6 +76,7 @@ public class UpdateCIRequestTests {
                 .anyMatch(violation -> violation.getPropertyPath().toString().equals("name")
                         && violation.getMessage().equals(expectedMessage));
     }
+
     /**
      * Test 4: CI name has more than maximum length
      */
@@ -83,7 +84,7 @@ public class UpdateCIRequestTests {
     @DisplayName("CI name has more than maximum length → validation test failed with message: CI name length must be between 2 and 255 characters.")
     void ciNameIsMaxLengthValidationFailedWithMessage() {
         String ciName = "a".repeat(256);
-        UpdateCIRequest dto = new UpdateCIRequest(ciName, "some description", "Model", "ASUS","123","24D6C");
+        UpdateCIRequest dto = new UpdateCIRequest(ciName, "Core network switch located in server room A", "Network Equipment", "Cisco", "FCW2142L0QK", "Catalyst 9300");
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("ci.name.length");
         assertThat(violations).hasSize(1);
@@ -97,8 +98,8 @@ public class UpdateCIRequestTests {
      */
     @Test
     @DisplayName("All data is ok → validation test is ok.")
-    void createStatusRequestIsOk() {
-        UpdateCIRequest request = new UpdateCIRequest("Catalyst 8300 Series", "Cisco Catalyst", "Catalyst 8300", "Cisco","123BV45","Catalyst 8300-1N1S-6T");
+    void updateCIRequestIsOk() {
+        UpdateCIRequest request = new UpdateCIRequest("Core-SW-01", "Core network switch located in server room A", "Network Equipment", "Cisco", "FCW2142L0QK", "Catalyst 9300");
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(request);
         assertThat(violations).isEmpty();
     }
@@ -110,7 +111,7 @@ public class UpdateCIRequestTests {
     @DisplayName("CI type has more than maximum length → validation test failed with message: CI type length must be less than 150 characters.")
     void ciTypeIsMaxLengthValidationFailedWithMessage() {
         String type = "a".repeat(151);
-        UpdateCIRequest dto = new UpdateCIRequest("Catalyst 8300 Series", "some description", type, "ASUS","123","24D6C");
+        UpdateCIRequest dto = new UpdateCIRequest("Core-SW-01", "Core network switch located in server room A", type, "Cisco", "FCW2142L0QK", "Catalyst 9300");
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("ci.type.length");
         assertThat(violations).hasSize(1);
@@ -120,13 +121,13 @@ public class UpdateCIRequestTests {
     }
 
     /**
-     * Test 7: CI type has more than maximum length
+     * Test 7: CI manufacturer has more than maximum length
      */
     @Test
     @DisplayName("CI manufacturer has more than maximum length → validation test failed with message: CI manufacturer length must be less than 150 characters.")
     void ciManufacturerIsMaxLengthValidationFailedWithMessage() {
         String manufacturer = "a".repeat(151);
-        UpdateCIRequest dto = new UpdateCIRequest("Catalyst 8300 Series", "some description", "Model", manufacturer,"123","24D6C");
+        UpdateCIRequest dto = new UpdateCIRequest("Core-SW-01", "Core network switch located in server room A", "Network Equipment", manufacturer, "FCW2142L0QK", "Catalyst 9300");
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("ci.manufacturer.length");
         assertThat(violations).hasSize(1);
@@ -142,7 +143,7 @@ public class UpdateCIRequestTests {
     @DisplayName("CI serialNumber has more than maximum length → validation test failed with message: CI serialNumber length must be less than 150 characters.")
     void ciSerialNumberIsMaxLengthValidationFailedWithMessage() {
         String serialNumber = "a".repeat(151);
-        UpdateCIRequest dto = new UpdateCIRequest("Catalyst 8300 Series", "some description", "Model", "ASUS",serialNumber,"24D6C");
+        UpdateCIRequest dto = new UpdateCIRequest("Core-SW-01", "Core network switch located in server room A", "Network Equipment", "Cisco", serialNumber, "Catalyst 9300");
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("ci.serialNumber.length");
         assertThat(violations).hasSize(1);
@@ -158,7 +159,7 @@ public class UpdateCIRequestTests {
     @DisplayName("CI model has more than maximum length → validation test failed with message: CI model length must be less than 150 characters.")
     void ciModelIsMaxLengthValidationFailedWithMessage() {
         String model = "a".repeat(151);
-        UpdateCIRequest dto = new UpdateCIRequest("Catalyst 8300 Series", "some description", "Model", "ASUS","123D56v",model);
+        UpdateCIRequest dto = new UpdateCIRequest("Core-SW-01", "Core network switch located in server room A", "Network Equipment", "Cisco", "FCW2142L0QK", model);
         Set<ConstraintViolation<UpdateCIRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("ci.model.length");
         assertThat(violations).hasSize(1);

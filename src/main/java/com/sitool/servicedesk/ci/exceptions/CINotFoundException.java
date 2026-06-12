@@ -8,6 +8,6 @@ import org.springframework.http.HttpStatus;
  */
 public class CINotFoundException extends RestApiException {
     public CINotFoundException() {
-        super(HttpStatus.NOT_FOUND, "CI not found");;
+        super(HttpStatus.NOT_FOUND, "Configuration item not found");;
     }
 }
