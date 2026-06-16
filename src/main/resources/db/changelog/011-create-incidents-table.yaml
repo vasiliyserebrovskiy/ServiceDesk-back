@@ -19,8 +19,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: number
-                  type: BIGINT
-                  defaultValueSequenceNext: incident_number_seq
+                  type: VARCHAR(20)
                   constraints:
                     nullable: false
                     unique: true

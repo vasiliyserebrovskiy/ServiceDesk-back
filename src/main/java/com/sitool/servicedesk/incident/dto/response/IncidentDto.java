@@ -20,7 +20,7 @@ public record IncidentDto(
         Priority priority,
         Impact impact,
         Urgency urgency,
-        UUID CIId,
+        UUID ciId,
         UUID groupId,
         UUID assigneeId,
         String shortDescription,
