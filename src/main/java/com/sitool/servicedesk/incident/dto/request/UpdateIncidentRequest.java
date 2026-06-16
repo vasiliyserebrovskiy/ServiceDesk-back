@@ -14,8 +14,6 @@ import java.util.UUID;
  * Request payload for updating an incident.
  */
 public record UpdateIncidentRequest(
-        @NotBlank(message = "{incident.number.notBlank}")
-        String number,
         @NotNull(message = "{incident.requesterId.notNull}")
         UUID requesterId,
         @NotNull(message = "{incident.categoryId.notNull}")
