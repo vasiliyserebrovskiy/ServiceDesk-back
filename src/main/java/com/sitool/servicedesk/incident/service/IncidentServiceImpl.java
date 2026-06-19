@@ -150,7 +150,8 @@ public class IncidentServiceImpl implements IncidentService {
 
         incidentRepository.save(newIncident);
 
-        return mapper.toIncidentDto(newIncident);
+        Incident saved = incidentRepository.saveAndFlush(newIncident);
+        return mapper.toIncidentDto(saved);
     }
 
     /**
