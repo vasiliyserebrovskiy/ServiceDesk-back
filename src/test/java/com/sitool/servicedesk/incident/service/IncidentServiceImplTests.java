@@ -31,6 +31,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -92,19 +93,20 @@ public class IncidentServiceImplTests {
         User requester = new User();
         Category category = new Category();
         Status status = new Status();
+        LocalDateTime dateTime = LocalDateTime.now();
 
         IncidentDto dto = new IncidentDto(
                 incidentId, "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                 null, null, null, "Short description", "Some description",
-                null, false, null
+                null, false, null, dateTime
         );
 
         when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
         when(userRepository.findById(requesterId)).thenReturn(Optional.of(requester));
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
         when(statusRepository.findById(statusId)).thenReturn(Optional.of(status));
-        when(incidentRepository.save(any(Incident.class))).thenAnswer(i -> i.getArgument(0));
+        when(incidentRepository.saveAndFlush(any(Incident.class))).thenAnswer(i -> i.getArgument(0));
         when(mapper.toIncidentDto(any(Incident.class))).thenReturn(dto);
 
         IncidentDto result = incidentService.createIncident(request);
@@ -192,6 +194,7 @@ public class IncidentServiceImplTests {
     @DisplayName("Update incident → updated successfully")
     void shouldUpdateIncidentSuccessfully() {
         UUID newStatusId = UUID.randomUUID();
+        LocalDateTime dateTime = LocalDateTime.now();
 
         User requester = new User();
         setId(requester, requesterId);
@@ -226,7 +229,7 @@ public class IncidentServiceImplTests {
                 incidentId, "INC0000001", requesterId, categoryId, null,
                 newStatusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                 null, null, null, "New short description", null,
-                null, false, null
+                null, false, null, dateTime
         );
 
         when(incidentRepository.findById(incidentId)).thenReturn(Optional.of(existing));
@@ -259,11 +262,12 @@ public class IncidentServiceImplTests {
     @DisplayName("Get incident by id → returns incident")
     void shouldReturnIncidentById() {
         Incident existing = new Incident();
+        LocalDateTime dateTime = LocalDateTime.now();
         IncidentDto dto = new IncidentDto(
                 incidentId, "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                 null, null, null, "Short description", null,
-                null, false, null
+                null, false, null, dateTime
         );
 
         when(incidentRepository.findById(incidentId)).thenReturn(Optional.of(existing));
@@ -289,13 +293,14 @@ public class IncidentServiceImplTests {
     void shouldReturnAllIncidents() {
         Incident i1 = new Incident();
         Incident i2 = new Incident();
+        LocalDateTime dateTime = LocalDateTime.now();
 
         when(incidentRepository.findAll()).thenReturn(List.of(i1, i2));
         when(mapper.toIncidentDto(any())).thenReturn(
                 new IncidentDto(UUID.randomUUID(), "INC0000001", requesterId, categoryId, null,
                         statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                         null, null, null, "Short description", null,
-                        null, false, null)
+                        null, false, null, dateTime)
         );
 
         List<IncidentDto> result = incidentService.getAllIncidents();

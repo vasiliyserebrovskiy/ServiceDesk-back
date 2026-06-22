@@ -27,6 +27,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,6 +96,7 @@ public class IncidentControllerTests {
         UUID requesterId = UUID.randomUUID();
         UUID categoryId = UUID.randomUUID();
         UUID statusId = UUID.randomUUID();
+        LocalDateTime dateTime = LocalDateTime.now();
 
         IncidentDto incident = new IncidentDto(
                 incidentId,
@@ -111,7 +115,8 @@ public class IncidentControllerTests {
                 "Some description",
                 "",
                 false,
-                null
+                null,
+                dateTime
         );
 
         when(incidentService.createIncident(any(CreateIncidentRequest.class))).thenReturn(incident);
@@ -173,6 +178,7 @@ public class IncidentControllerTests {
         UUID requesterId = UUID.randomUUID();
         UUID categoryId = UUID.randomUUID();
         UUID statusId = UUID.randomUUID();
+        LocalDateTime dateTime = LocalDateTime.now();
 
         IncidentDto incident = new IncidentDto(
                 incidentId,
@@ -191,7 +197,8 @@ public class IncidentControllerTests {
                 "Updated Description",
                 "",
                 false,
-                null
+                null,
+                dateTime
         );
 
         when(incidentService.updateIncident(any(UUID.class), any(UpdateIncidentRequest.class)))
@@ -232,6 +239,7 @@ public class IncidentControllerTests {
         UUID requesterId = UUID.randomUUID();
         UUID categoryId = UUID.randomUUID();
         UUID statusId = UUID.randomUUID();
+        LocalDateTime dateTime = LocalDateTime.now();
 
         IncidentDto incident = new IncidentDto(
                 incidentId,
@@ -250,7 +258,8 @@ public class IncidentControllerTests {
                 "Some description",
                 "",
                 false,
-                null
+                null,
+                dateTime
         );
 
         when(incidentService.getIncident(incidentId))
@@ -277,6 +286,8 @@ public class IncidentControllerTests {
         UUID requesterId = UUID.randomUUID();
         UUID categoryId = UUID.randomUUID();
         UUID statusId = UUID.randomUUID();
+        LocalDateTime dateTime = LocalDateTime.now();
+
 
         IncidentDto first = new IncidentDto(
                 incidentId,
@@ -295,7 +306,8 @@ public class IncidentControllerTests {
                 "Some description",
                 "",
                 false,
-                null
+                null,
+                dateTime
         );
 
         IncidentDto second = new IncidentDto(
@@ -315,7 +327,8 @@ public class IncidentControllerTests {
                 "Some description",
                 "",
                 false,
-                null
+                null,
+                dateTime
         );
 
         when(incidentService.getAllIncidents())

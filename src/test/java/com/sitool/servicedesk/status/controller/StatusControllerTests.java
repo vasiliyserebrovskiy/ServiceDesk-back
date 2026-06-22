@@ -7,8 +7,10 @@ import com.sitool.servicedesk.status.dto.request.UpdateStatusRequest;
 import com.sitool.servicedesk.status.dto.response.StatusDto;
 import com.sitool.servicedesk.status.service.StatusService;
 import com.sitool.servicedesk.token.service.RefreshTokenService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -58,6 +60,10 @@ public class StatusControllerTests {
         RefreshTokenService refreshTokenService() {return mock(RefreshTokenService.class);}
     }
 
+    @AfterEach
+    void resetMocks() {
+        Mockito.reset(statusService);
+    }
     @Test
     @WithMockUser
     @DisplayName("Should create status and return 201")
