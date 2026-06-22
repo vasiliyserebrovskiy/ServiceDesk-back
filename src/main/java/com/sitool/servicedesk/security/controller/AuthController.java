@@ -5,15 +5,14 @@ import com.sitool.servicedesk.security.dto.response.TokenResponseDto;
 import com.sitool.servicedesk.security.service.AuthService;
 import com.sitool.servicedesk.security.service.CookieService;
 import com.sitool.servicedesk.token.service.RefreshTokenService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Arrays;
 
 import static com.sitool.servicedesk.security.constants.Constants.ACCESS_TOKEN_COOKIE;
 import static com.sitool.servicedesk.security.constants.Constants.REFRESH_TOKEN_COOKIE;
@@ -34,7 +33,7 @@ import static com.sitool.servicedesk.security.constants.Constants.REFRESH_TOKEN_
  */
 @RestController
 @RequiredArgsConstructor
-public class AuthController implements AuthApi{
+public class AuthController implements AuthApi {
 
     private final AuthService authService;
     private final CookieService cookieService;
@@ -45,14 +44,13 @@ public class AuthController implements AuthApi{
      */
     @Override
     public ResponseEntity<Void> login(LoginUserRequest loginUserRequest, HttpServletResponse response) {
-
         final TokenResponseDto tokens = authService.login(loginUserRequest);
 
-        final Cookie accessCookie = cookieService.generateAccessTokenCookie(tokens.accessToken());
-        final Cookie refreshCookie = cookieService.generateRefreshTokenCookie(tokens.refreshToken());
+        final ResponseCookie accessCookie = cookieService.generateAccessTokenCookie(tokens.accessToken());
+        final ResponseCookie refreshCookie = cookieService.generateRefreshTokenCookie(tokens.refreshToken());
 
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
         return ResponseEntity.ok().build();
     }
@@ -62,19 +60,17 @@ public class AuthController implements AuthApi{
      */
     @Override
     public ResponseEntity<Void> refresh(HttpServletRequest request, HttpServletResponse response) {
-
         String refreshToken = cookieService.extractRefreshToken(request);
 
         final TokenResponseDto newAccessTokens = authService.refreshAccessToken(refreshToken);
 
-        final Cookie accessCookie = cookieService.generateAccessTokenCookie(newAccessTokens.accessToken());
-        final Cookie refreshCookie = cookieService.generateRefreshTokenCookie(newAccessTokens.refreshToken());
+        final ResponseCookie accessCookie = cookieService.generateAccessTokenCookie(newAccessTokens.accessToken());
+        final ResponseCookie refreshCookie = cookieService.generateRefreshTokenCookie(newAccessTokens.refreshToken());
 
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
         return ResponseEntity.ok().build();
-
     }
 
     /**
@@ -82,21 +78,19 @@ public class AuthController implements AuthApi{
      */
     @Override
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-
         String refreshToken = cookieService.extractRefreshToken(request);
 
         if (refreshToken != null) {
             refreshTokenService.logout(refreshToken);
         }
 
-        final Cookie accessCookie = cookieService.generateLogoutCookie(ACCESS_TOKEN_COOKIE);
-        final Cookie refreshCookie = cookieService.generateLogoutCookie(REFRESH_TOKEN_COOKIE);
+        final ResponseCookie accessCookie = cookieService.generateLogoutCookie(ACCESS_TOKEN_COOKIE);
+        final ResponseCookie refreshCookie = cookieService.generateLogoutCookie(REFRESH_TOKEN_COOKIE);
         SecurityContextHolder.clearContext();
 
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
         return ResponseEntity.ok().build();
     }
-    
 }
