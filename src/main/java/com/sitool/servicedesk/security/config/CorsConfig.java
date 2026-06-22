@@ -21,7 +21,8 @@ public class CorsConfig {
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         var configuration = new org.springframework.web.cors.CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://service-desk-vasiliy-serebrovskiys-projects.vercel.app",
+                "https://service-desk-git-main-vasiliy-serebrovskiys-projects.vercel.app", "https://service-desk-i3dlwfbjz-vasiliy-serebrovskiys-projects.vercel.app", "https://service-desk-beryl.vercel.app"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
