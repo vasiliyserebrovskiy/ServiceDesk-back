@@ -87,7 +87,7 @@ public interface GroupApi {
                     description = "Group not found"
             )
     })
-    @PatchMapping("/{groupId}")
+    @PutMapping("/{groupId}")
     GroupDto updateGroup(@PathVariable UUID groupId, @Valid @RequestBody UpdateGroupRequest updateGroupRequest);
 
     @Operation(

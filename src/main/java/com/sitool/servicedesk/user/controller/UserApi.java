@@ -173,7 +173,7 @@ public interface UserApi {
                     description = "User not found"
             )
     })
-    @PatchMapping("/{userId}")
+    @PutMapping("/{userId}")
     UserDto updateUser(@PathVariable UUID userId, @Valid @RequestBody UpdateUserDto updateUserDto);
 
     @Operation(
