@@ -25,9 +25,9 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -141,7 +141,7 @@ class GroupControllerTest {
         when(groupService.updateGroup(any(UUID.class), any(UpdateGroupRequest.class)))
                 .thenReturn(response);
 
-        mockMvc.perform(patch("/api/v1/groups/{groupId}", groupId)
+        mockMvc.perform(put("/api/v1/groups/{groupId}", groupId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
