@@ -21,3 +21,5 @@ databaseChangeLog:
       file: db/changelog/010-create-statuses-table.yaml
   - include:
       file: db/changelog/011-create-incidents-table.yaml
+  - include:
+      file: db/changelog/012-create-servicenow-settings-table.yaml
