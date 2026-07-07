@@ -20,3 +20,7 @@ jwt:
   rt:
     live-in-min: 3600
     secret: uWW3PY5bCLizaMhpjGEXhtb5eU1cAzqveIJvEKRKTv0=
+
+servicenow:
+  encryption:
+    key: dGVzdEVuY3J5cHRpb25LZXkxMjM0NTY3ODkwMTIzNDU2Nzg=
