@@ -27,6 +27,11 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml
 
+server:
+  tomcat:
+    threads:
+      max: 20
+
 logging:
   level:
     org.springframework.security: INFO
