@@ -298,7 +298,7 @@ public class IncidentServiceImplTests {
         Incident i2 = new Incident();
         LocalDateTime dateTime = LocalDateTime.now();
 
-        when(incidentRepository.findAll()).thenReturn(List.of(i1, i2));
+        when(incidentRepository.findAllByOrderByCreatedAtDesc()).thenReturn(List.of(i1, i2));
         when(mapper.toIncidentDto(any())).thenReturn(
                 new IncidentDto(UUID.randomUUID(), "INC0000001", requesterId, categoryId, null,
                         statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
@@ -309,7 +309,7 @@ public class IncidentServiceImplTests {
         List<IncidentDto> result = incidentService.getAllIncidents();
 
         assertEquals(2, result.size());
-        verify(incidentRepository).findAll();
+        verify(incidentRepository).findAllByOrderByCreatedAtDesc();
     }
 
     private void setId(Object entity, UUID id) {
