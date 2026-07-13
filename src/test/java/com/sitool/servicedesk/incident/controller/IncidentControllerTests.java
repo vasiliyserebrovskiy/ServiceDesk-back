@@ -26,13 +26,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -137,7 +133,8 @@ public class IncidentControllerTests {
                                  "groupId": null,
                                  "assigneeId": null,
                                  "shortDescription": "Short description",
-                                 "description": "Some description"
+                                 "description": "Some description",
+                                 "syncToServiceNow": "false"
                                  }
                                 """)
                 )

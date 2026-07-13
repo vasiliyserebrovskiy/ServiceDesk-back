@@ -150,12 +150,12 @@ public class IncidentServiceImpl implements IncidentService {
         newIncident.setShortDescription(request.shortDescription());
         newIncident.setDescription(request.description());
 
-        //incidentRepository.save(newIncident);
-
         Incident saved = incidentRepository.saveAndFlush(newIncident);
 
         // Create incident in ServiceNow
-        serviceNowIntegrationService.syncIncidentToServiceNow(saved);
+        if (Boolean.TRUE.equals(request.syncToServiceNow())) {
+            serviceNowIntegrationService.syncIncidentToServiceNow(saved);
+        }
 
         return mapper.toIncidentDto(saved);
     }
@@ -287,7 +287,7 @@ public class IncidentServiceImpl implements IncidentService {
     @Override
     @Transactional(readOnly = true)
     public List<IncidentDto> getAllIncidents() {
-        return incidentRepository.findAll()
+        return incidentRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
                 .map(mapper::toIncidentDto)
                 .toList();
