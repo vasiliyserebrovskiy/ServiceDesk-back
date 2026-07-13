@@ -12,6 +12,7 @@ import com.sitool.servicedesk.incident.exceptions.IncidentAlreadyExistException;
 import com.sitool.servicedesk.incident.exceptions.IncidentNotFoundException;
 import com.sitool.servicedesk.incident.mapper.IncidentMapper;
 import com.sitool.servicedesk.incident.repository.IncidentRepository;
+import com.sitool.servicedesk.servicenow.service.ServiceNowIntegrationService;
 import com.sitool.servicedesk.shared.enums.Impact;
 import com.sitool.servicedesk.shared.enums.Priority;
 import com.sitool.servicedesk.shared.enums.Urgency;
@@ -54,6 +55,8 @@ public class IncidentServiceImplTests {
     private StatusRepository statusRepository;
     @Mock
     private IncidentMapper mapper;
+    @Mock
+    private ServiceNowIntegrationService serviceNowIntegrationService;
 
     @InjectMocks
     private IncidentServiceImpl incidentService;
@@ -87,7 +90,7 @@ public class IncidentServiceImplTests {
         CreateIncidentRequest request = new CreateIncidentRequest(
                 "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
-                null, null, null, "Short description", "Some description"
+                null, null, null, "Short description", "Some description", false
         );
 
         User requester = new User();
@@ -113,7 +116,7 @@ public class IncidentServiceImplTests {
 
         assertEquals("INC0000001", result.number());
         assertEquals(Priority.LOW, result.priority());
-        verify(incidentRepository).save(any(Incident.class));
+        verify(incidentRepository).saveAndFlush(any(Incident.class));
     }
 
     @Test
@@ -122,7 +125,7 @@ public class IncidentServiceImplTests {
         CreateIncidentRequest request = new CreateIncidentRequest(
                 "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
-                null, null, null, "Short description", "Some description"
+                null, null, null, "Short description", "Some description", false
         );
 
         when(incidentRepository.existsByNumber("INC0000001")).thenReturn(true);
@@ -139,7 +142,7 @@ public class IncidentServiceImplTests {
         CreateIncidentRequest request = new CreateIncidentRequest(
                 "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
-                null, null, null, "Short description", "Some description"
+                null, null, null, "Short description", "Some description", false
         );
 
         when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
@@ -157,7 +160,7 @@ public class IncidentServiceImplTests {
         CreateIncidentRequest request = new CreateIncidentRequest(
                 "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
-                null, null, null, "Short description", "Some description"
+                null, null, null, "Short description", "Some description", false
         );
 
         when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
@@ -176,7 +179,7 @@ public class IncidentServiceImplTests {
         CreateIncidentRequest request = new CreateIncidentRequest(
                 "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
-                null, null, null, "Short description", "Some description"
+                null, null, null, "Short description", "Some description", false
         );
 
         when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
@@ -317,5 +320,71 @@ public class IncidentServiceImplTests {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    @DisplayName("Create incident → syncToServiceNow true → calls ServiceNow sync")
+    void shouldCallServiceNowSyncWhenSyncToServiceNowIsTrue() {
+        CreateIncidentRequest request = new CreateIncidentRequest(
+                "INC0000001", requesterId, categoryId, null,
+                statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
+                null, null, null, "Short description", "Some description", true
+        );
+
+        User requester = new User();
+        Category category = new Category();
+        Status status = new Status();
+        LocalDateTime dateTime = LocalDateTime.now();
+
+        IncidentDto dto = new IncidentDto(
+                incidentId, "INC0000001", requesterId, categoryId, null,
+                statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
+                null, null, null, "Short description", "Some description",
+                null, false, null, dateTime
+        );
+
+        when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
+        when(userRepository.findById(requesterId)).thenReturn(Optional.of(requester));
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+        when(statusRepository.findById(statusId)).thenReturn(Optional.of(status));
+        when(incidentRepository.saveAndFlush(any(Incident.class))).thenAnswer(i -> i.getArgument(0));
+        when(mapper.toIncidentDto(any(Incident.class))).thenReturn(dto);
+
+        incidentService.createIncident(request);
+
+        verify(serviceNowIntegrationService).syncIncidentToServiceNow(any(Incident.class));
+    }
+
+    @Test
+    @DisplayName("Create incident → syncToServiceNow false → does not call ServiceNow sync")
+    void shouldNotCallServiceNowSyncWhenSyncToServiceNowIsFalse() {
+        CreateIncidentRequest request = new CreateIncidentRequest(
+                "INC0000001", requesterId, categoryId, null,
+                statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
+                null, null, null, "Short description", "Some description", false
+        );
+
+        User requester = new User();
+        Category category = new Category();
+        Status status = new Status();
+        LocalDateTime dateTime = LocalDateTime.now();
+
+        IncidentDto dto = new IncidentDto(
+                incidentId, "INC0000001", requesterId, categoryId, null,
+                statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
+                null, null, null, "Short description", "Some description",
+                null, false, null, dateTime
+        );
+
+        when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
+        when(userRepository.findById(requesterId)).thenReturn(Optional.of(requester));
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+        when(statusRepository.findById(statusId)).thenReturn(Optional.of(status));
+        when(incidentRepository.saveAndFlush(any(Incident.class))).thenAnswer(i -> i.getArgument(0));
+        when(mapper.toIncidentDto(any(Incident.class))).thenReturn(dto);
+
+        incidentService.createIncident(request);
+
+        verify(serviceNowIntegrationService, never()).syncIncidentToServiceNow(any());
     }
 }

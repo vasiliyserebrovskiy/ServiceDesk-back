@@ -47,12 +47,12 @@ public class CreateIncidentRequestTests {
                 Priority.LOW,
                 Impact.LOW,
                 Urgency.LOW,
-
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.number.notBlank");
@@ -77,12 +77,12 @@ public class CreateIncidentRequestTests {
                 Priority.LOW,
                 Impact.LOW,
                 Urgency.LOW,
-
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.number.notBlank");
@@ -107,12 +107,12 @@ public class CreateIncidentRequestTests {
                 Priority.LOW,
                 Impact.LOW,
                 Urgency.LOW,
-
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.requesterId.notNull");
@@ -137,12 +137,12 @@ public class CreateIncidentRequestTests {
                 Priority.LOW,
                 Impact.LOW,
                 Urgency.LOW,
-
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.categoryId.notNull");
@@ -167,12 +167,12 @@ public class CreateIncidentRequestTests {
                 Priority.LOW,
                 Impact.LOW,
                 Urgency.LOW,
-
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.statusId.notNull");
@@ -197,12 +197,12 @@ public class CreateIncidentRequestTests {
                 null,
                 Impact.LOW,
                 Urgency.LOW,
-
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.priority.notNull");
@@ -231,7 +231,8 @@ public class CreateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.impact.notNull");
@@ -260,7 +261,8 @@ public class CreateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.urgency.notNull");
@@ -289,7 +291,8 @@ public class CreateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 null,
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.shortDescription.notBlank");
@@ -318,7 +321,8 @@ public class CreateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.shortDescription.notBlank");
@@ -351,7 +355,8 @@ public class CreateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.shortDescription.length");
@@ -381,7 +386,8 @@ public class CreateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 shortDescription,
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.shortDescription.length");
@@ -410,7 +416,8 @@ public class CreateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                false
         );
         Set<ConstraintViolation<CreateIncidentRequest>> violations = validator.validate(dto);
         assertThat(violations).isEmpty();

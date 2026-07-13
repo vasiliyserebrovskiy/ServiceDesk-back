@@ -39,5 +39,6 @@ public record CreateIncidentRequest(
                 message="{incident.shortDescription.length}"
         )
         String shortDescription,
-        String description
+        String description,
+        Boolean syncToServiceNow
 ) {}
