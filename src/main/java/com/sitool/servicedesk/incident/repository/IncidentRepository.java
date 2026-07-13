@@ -4,6 +4,7 @@ import com.sitool.servicedesk.incident.entity.Incident;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,4 +16,6 @@ public interface IncidentRepository extends JpaRepository<Incident, UUID> {
     Long getNextNumber();
 
     boolean existsByNumber(String number);
+
+    List<Incident> findAllByOrderByCreatedAtDesc();
 }

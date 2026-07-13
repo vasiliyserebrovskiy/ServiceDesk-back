@@ -287,7 +287,7 @@ public class IncidentServiceImpl implements IncidentService {
     @Override
     @Transactional(readOnly = true)
     public List<IncidentDto> getAllIncidents() {
-        return incidentRepository.findAll()
+        return incidentRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
                 .map(mapper::toIncidentDto)
                 .toList();
