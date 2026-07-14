@@ -321,7 +321,7 @@ public class IncidentServiceImplTests {
             throw new RuntimeException(e);
         }
     }
-
+/* OLD Test with sync method
     @Test
     @DisplayName("Create incident → syncToServiceNow true → calls ServiceNow sync")
     void shouldCallServiceNowSyncWhenSyncToServiceNowIsTrue() {
@@ -352,7 +352,44 @@ public class IncidentServiceImplTests {
 
         incidentService.createIncident(request);
 
-        verify(serviceNowIntegrationService).syncIncidentToServiceNow(any(Incident.class));
+        verify(serviceNowIntegrationService).syncIncidentToServiceNow(any(Incident.class)); // sync method
+    } */
+
+    @Test
+    @DisplayName("Create incident → syncToServiceNow true → calls ServiceNow async sync")
+    void shouldCallServiceNowSyncWhenSyncToServiceNowIsTrue() {
+        CreateIncidentRequest request = new CreateIncidentRequest(
+                "INC0000001", requesterId, categoryId, null,
+                statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
+                null, null, null, "Short description", "Some description", true
+        );
+
+        User requester = new User();
+        Category category = new Category();
+        Status status = new Status();
+        LocalDateTime dateTime = LocalDateTime.now();
+
+        IncidentDto dto = new IncidentDto(
+                incidentId, "INC0000001", requesterId, categoryId, null,
+                statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
+                null, null, null, "Short description", "Some description",
+                null, false, null, dateTime
+        );
+
+        when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
+        when(userRepository.findById(requesterId)).thenReturn(Optional.of(requester));
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+        when(statusRepository.findById(statusId)).thenReturn(Optional.of(status));
+        when(incidentRepository.saveAndFlush(any(Incident.class))).thenAnswer(i -> {
+            Incident incidentArg = i.getArgument(0);
+            setId(incidentArg, incidentId);
+            return incidentArg;
+        });
+        when(mapper.toIncidentDto(any(Incident.class))).thenReturn(dto);
+
+        incidentService.createIncident(request);
+
+        verify(serviceNowIntegrationService).syncIncidentToServiceNowAsync(incidentId);
     }
 
     @Test

@@ -154,7 +154,8 @@ public class IncidentServiceImpl implements IncidentService {
 
         // Create incident in ServiceNow
         if (Boolean.TRUE.equals(request.syncToServiceNow())) {
-            serviceNowIntegrationService.syncIncidentToServiceNow(saved);
+//            serviceNowIntegrationService.syncIncidentToServiceNow(saved); //sync variant
+            serviceNowIntegrationService.syncIncidentToServiceNowAsync(saved.getId());
         }
 
         return mapper.toIncidentDto(saved);
