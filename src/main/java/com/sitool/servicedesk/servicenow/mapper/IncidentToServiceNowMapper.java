@@ -21,5 +21,9 @@ public interface IncidentToServiceNowMapper {
             expression = "java(incident.getGroup() != null ? incident.getGroup().getName() : null)")
     @Mapping(target = "assignedToEmail",
             expression = "java(incident.getAssignee() != null ? incident.getAssignee().getEmail() : null)")
+    @Mapping(target = "ciSerialNumber",
+            expression = "java(incident.getCi() != null ? incident.getCi().getSerialNumber() : null)")
+    @Mapping(target = "ciName",
+            expression = "java(incident.getCi() != null ? incident.getCi().getName() : null)")
     ServiceNowIncidentRequest toServiceNowRequest(Incident incident);
 }
