@@ -18,5 +18,7 @@ public record ServiceNowIncidentRequest(
         @JsonProperty("external_number") String externalNumber,
         @JsonProperty("requester_email") String requesterEmail,
         @JsonProperty("assignment_group") String assignmentGroup,
-        @JsonProperty("assigned_to_email") String assignedToEmail
+        @JsonProperty("assigned_to_email") String assignedToEmail,
+        @JsonProperty("ci_serial_number") String ciSerialNumber,
+        @JsonProperty("ci_name") String ciName
 ) {}
