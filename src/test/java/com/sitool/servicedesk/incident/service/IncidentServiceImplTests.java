@@ -66,6 +66,9 @@ public class IncidentServiceImplTests {
     private UUID categoryId;
     private UUID statusId;
 
+    private static final LocalDateTime ACTUAL_START = LocalDateTime.of(2026, 8, 17, 10, 30);
+    private static final LocalDateTime ACTUAL_END = LocalDateTime.of(2026, 8, 17, 14, 0);
+
     @BeforeEach
     void setUp() {
         incidentId = UUID.randomUUID();
@@ -102,7 +105,7 @@ public class IncidentServiceImplTests {
                 incidentId, "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                 null, null, null, "Short description", "Some description",
-                null, false, null, dateTime
+                null, false, null, dateTime, "", ACTUAL_START, ACTUAL_END
         );
 
         when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
@@ -225,14 +228,14 @@ public class IncidentServiceImplTests {
                 requesterId, categoryId, null, newStatusId, Priority.LOW,
                 Impact.LOW, Urgency.LOW,
                 null, null, null,
-                "New short description", null
+                "New short description", null, "", ACTUAL_START, ACTUAL_END
         );
 
         IncidentDto dto = new IncidentDto(
                 incidentId, "INC0000001", requesterId, categoryId, null,
                 newStatusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                 null, null, null, "New short description", null,
-                null, false, null, dateTime
+                null, false, null, dateTime, "", ACTUAL_START, ACTUAL_END
         );
 
         when(incidentRepository.findById(incidentId)).thenReturn(Optional.of(existing));
@@ -252,7 +255,7 @@ public class IncidentServiceImplTests {
                 requesterId, categoryId, null, statusId, Priority.LOW,
                 Impact.LOW, Urgency.LOW,
                 null, null, null,
-                "Short description", null
+                "Short description", null, "", ACTUAL_START, ACTUAL_END
         );
 
         when(incidentRepository.findById(incidentId)).thenReturn(Optional.empty());
@@ -270,7 +273,7 @@ public class IncidentServiceImplTests {
                 incidentId, "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                 null, null, null, "Short description", null,
-                null, false, null, dateTime
+                null, false, null, dateTime, "", ACTUAL_START, ACTUAL_END
         );
 
         when(incidentRepository.findById(incidentId)).thenReturn(Optional.of(existing));
@@ -303,7 +306,7 @@ public class IncidentServiceImplTests {
                 new IncidentDto(UUID.randomUUID(), "INC0000001", requesterId, categoryId, null,
                         statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                         null, null, null, "Short description", null,
-                        null, false, null, dateTime)
+                        null, false, null, dateTime, "", ACTUAL_START, ACTUAL_END)
         );
 
         List<IncidentDto> result = incidentService.getAllIncidents();
@@ -373,7 +376,7 @@ public class IncidentServiceImplTests {
                 incidentId, "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                 null, null, null, "Short description", "Some description",
-                null, false, null, dateTime
+                null, false, null, dateTime, "", ACTUAL_START, ACTUAL_END
         );
 
         when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);
@@ -410,7 +413,7 @@ public class IncidentServiceImplTests {
                 incidentId, "INC0000001", requesterId, categoryId, null,
                 statusId, Priority.LOW, Impact.LOW, Urgency.LOW,
                 null, null, null, "Short description", "Some description",
-                null, false, null, dateTime
+                null, false, null, dateTime, "", ACTUAL_START, ACTUAL_END
         );
 
         when(incidentRepository.existsByNumber("INC0000001")).thenReturn(false);

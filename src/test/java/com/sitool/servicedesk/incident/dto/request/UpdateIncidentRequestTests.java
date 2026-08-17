@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
@@ -24,6 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UpdateIncidentRequestTests {
     private static Validator validator;
     private static ResourceBundle messages;
+    private static final LocalDateTime ACTUAL_START = LocalDateTime.of(2026, 8, 17, 10, 30);
+    private static final LocalDateTime ACTUAL_END = LocalDateTime.of(2026, 8, 17, 14, 0);
 
     @BeforeAll
     static void init() {
@@ -38,6 +41,10 @@ public class UpdateIncidentRequestTests {
     @Test
     @DisplayName("Incident requesterId is null → validation test failed with message: Incident requesterId can not be null.")
     void incidentRequesterIdIsNullValidationFailedWithMessage() {
+
+        LocalDateTime actualStart = LocalDateTime.of(2026, 8, 17, 10, 30);
+        LocalDateTime actualEnd = LocalDateTime.of(2026, 8, 17, 14, 0);
+
         UpdateIncidentRequest dto = new UpdateIncidentRequest(
                 null,
                 UUID.randomUUID(),
@@ -50,7 +57,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.requesterId.notNull");
@@ -78,7 +88,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.categoryId.notNull");
@@ -106,7 +119,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.statusId.notNull");
@@ -134,7 +150,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.priority.notNull");
@@ -162,7 +181,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.impact.notNull");
@@ -190,7 +212,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.urgency.notNull");
@@ -218,7 +243,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 null,
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.shortDescription.notBlank");
@@ -246,7 +274,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.shortDescription.notBlank");
@@ -278,7 +309,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.shortDescription.length");
@@ -307,7 +341,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 shortDescription,
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         String expectedMessage = messages.getString("incident.shortDescription.length");
@@ -335,7 +372,10 @@ public class UpdateIncidentRequestTests {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 "Test incident",
-                "Test description"
+                "Test description",
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
         Set<ConstraintViolation<UpdateIncidentRequest>> violations = validator.validate(dto);
         assertThat(violations).isEmpty();
