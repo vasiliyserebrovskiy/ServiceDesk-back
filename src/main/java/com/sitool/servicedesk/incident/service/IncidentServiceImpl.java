@@ -260,6 +260,24 @@ public class IncidentServiceImpl implements IncidentService {
             updated = true;
         }
 
+        // If incident is not synchronized with ServiceNow then we need to change start/close date and close comments
+        if (Boolean.FALSE.equals(currentIncident.getServicenowSynced())) {
+            if (!Objects.equals(currentIncident.getCloseComment(), request.closeComment())) {
+                currentIncident.setCloseComment(request.closeComment());
+                updated = true;
+            }
+
+            if(!Objects.equals(currentIncident.getActualStart(), request.actualStart())) {
+                currentIncident.setActualStart(request.actualStart());
+                updated = true;
+            }
+
+            if(!Objects.equals(currentIncident.getActualEnd(), request.actualEnd())) {
+                currentIncident.setActualEnd(request.actualEnd());
+                updated = true;
+            }
+        }
+
         if (updated) {
             incidentRepository.save(currentIncident);
         }

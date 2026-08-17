@@ -92,6 +92,14 @@ public class Incident extends BaseEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Column(name = "close_comment")
+    private String closeComment;
+
+    @Column(name = "actual_start")
+    private LocalDateTime actualStart;
+
+    @Column(name = "actual_end")
+    private LocalDateTime actualEnd;
 
     @Override
     public String toString() {

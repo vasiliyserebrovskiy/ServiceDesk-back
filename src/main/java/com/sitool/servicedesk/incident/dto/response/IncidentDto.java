@@ -28,6 +28,9 @@ public record IncidentDto(
         String servicenowNumber,
         Boolean servicenowSynced,
         LocalDateTime servicenowSyncedAt,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        String closeComment,
+        LocalDateTime actualStart,
+        LocalDateTime actualEnd
 ) {
 }
