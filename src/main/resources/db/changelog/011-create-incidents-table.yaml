@@ -84,6 +84,11 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
+                  name: close_comment
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
                   name: servicenow_number
                   type: VARCHAR(150)
                   constraints:
@@ -97,6 +102,16 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: servicenow_synced_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: actual_start
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: actual_end
                   type: TIMESTAMP
                   constraints:
                     nullable: true

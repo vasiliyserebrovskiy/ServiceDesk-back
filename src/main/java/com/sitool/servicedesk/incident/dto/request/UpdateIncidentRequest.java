@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -37,5 +38,8 @@ public record UpdateIncidentRequest(
                 message="{incident.shortDescription.length}"
         )
         String shortDescription,
-        String description
+        String description,
+        String closeComment,
+        LocalDateTime actualStart,
+        LocalDateTime actualEnd
 ) {}

@@ -44,6 +44,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 public class IncidentControllerTests {
 
+    private static final LocalDateTime ACTUAL_START = LocalDateTime.of(2026, 8, 17, 10, 30);
+    private static final LocalDateTime ACTUAL_END = LocalDateTime.of(2026, 8, 17, 14, 0);
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -112,7 +115,10 @@ public class IncidentControllerTests {
                 "",
                 false,
                 null,
-                dateTime
+                dateTime,
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
 
         when(incidentService.createIncident(any(CreateIncidentRequest.class))).thenReturn(incident);
@@ -195,7 +201,10 @@ public class IncidentControllerTests {
                 "",
                 false,
                 null,
-                dateTime
+                dateTime,
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
 
         when(incidentService.updateIncident(any(UUID.class), any(UpdateIncidentRequest.class)))
@@ -256,7 +265,10 @@ public class IncidentControllerTests {
                 "",
                 false,
                 null,
-                dateTime
+                dateTime,
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
 
         when(incidentService.getIncident(incidentId))
@@ -304,7 +316,10 @@ public class IncidentControllerTests {
                 "",
                 false,
                 null,
-                dateTime
+                dateTime,
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
 
         IncidentDto second = new IncidentDto(
@@ -325,7 +340,10 @@ public class IncidentControllerTests {
                 "",
                 false,
                 null,
-                dateTime
+                dateTime,
+                "",
+                ACTUAL_START,
+                ACTUAL_END
         );
 
         when(incidentService.getAllIncidents())
