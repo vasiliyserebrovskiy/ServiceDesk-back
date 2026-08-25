@@ -4,6 +4,7 @@ import com.sitool.servicedesk.status.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -17,4 +18,7 @@ public interface StatusRepository extends JpaRepository<Status, UUID> {
     List<Status> findAllByIsRequestTrue();
     List<Status> findAllByIsChangeTrue();
     List<Status> findAllByIsTaskTrue();
+
+    Optional<UUID> findIdByName(String name);
+
 }

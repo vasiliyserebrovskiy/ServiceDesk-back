@@ -5,6 +5,7 @@ import com.sitool.servicedesk.sybcategory.entity.Subcategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -15,4 +16,5 @@ public interface SubcategoryRepository extends JpaRepository<Subcategory, UUID> 
     boolean existsByNameIgnoreCase(String name);
 
     List<Subcategory> findAllByCategoryId(UUID categoryId);
+    Optional<UUID> findIdByName(String name);
 }
