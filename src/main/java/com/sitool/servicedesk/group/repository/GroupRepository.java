@@ -2,7 +2,10 @@ package com.sitool.servicedesk.group.repository;
 
 import com.sitool.servicedesk.group.entity.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -17,4 +20,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
      * @return true if a group with this name exists, otherwise false
      */
     boolean existsByNameIgnoreCase(String name);
+
+    @Query("select g.id from Group g where g.name = :name")
+    Optional<UUID> findIdByName(@Param("name") String name);
 }

@@ -2,6 +2,8 @@ package com.sitool.servicedesk.user.repository;
 
 import com.sitool.servicedesk.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -39,4 +41,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return optional containing the found user
      */
     Optional<User> findByEmail(String email);
+
+    @Query("select u.id from User u where u.email = :email")
+    Optional<UUID> findIdByEmail(@Param("email") String email);
 }
