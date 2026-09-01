@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,7 @@ import static com.sitool.servicedesk.security.constants.Constants.ACCESS_TOKEN_C
  *
  * <p>The filter processes only access tokens.</p>
  */
+@Log4j2 //for debugging
 @Component
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -49,6 +51,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+        //DEBUG logs
+//        log.info("====START DEBUGGING REQUEST =====");
+//        log.info("Incoming {} {} — Cookie: {}", request.getMethod(), request.getRequestURI(), request.getHeader("Cookie"));
+//        log.info("====STOP DEBUGGING REQUEST =====");
+
         String token = resolveToken(request);
         final JwtTokenService.TokenType tokenType = JwtTokenService.TokenType.ACCESS;
 

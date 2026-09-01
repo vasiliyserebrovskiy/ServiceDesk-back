@@ -37,8 +37,8 @@ public class ServiceNowInboundSyncServiceImpl implements ServiceNowInboundSyncSe
     @Override
     @Transactional
     public void syncIncidentUpdate(String number, ServiceNowIncidentSyncRequest request) {
-        log.info("INCIDENT NUMBER: " + number);
-        log.info("INCIDENT DATA: " + request.toString());
+//        log.info("INCIDENT NUMBER: " + number);
+//        log.info("INCIDENT DATA: " + request.toString());
 
         // First of all we need to find incident
         Incident updatedIncident = incidentRepository.findByNumber(number).orElseThrow(() -> {
