@@ -4,8 +4,10 @@ import com.sitool.servicedesk.security.filter.JwtTokenFilter;
 import com.sitool.servicedesk.security.handler.RestAuthenticationEntryPoint;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 /**
  * Central security configuration for the application.
@@ -92,6 +95,10 @@ public class SecurityConfig {
                         //Login user
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh-token").permitAll()
+
+                        //Internal error dispatch — must stay open, otherwise real errors get masked as 401
+                        .requestMatchers("/error").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
@@ -112,5 +119,18 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    //DEBUGGING BEAN
+//    @Bean
+//    public FilterRegistrationBean<CommonsRequestLoggingFilter> requestLoggingFilter() {
+//        var filter = new CommonsRequestLoggingFilter();
+//        filter.setIncludeHeaders(true);
+//        filter.setIncludePayload(true);
+//        filter.setMaxPayloadLength(10000);
+//
+//        var registration = new FilterRegistrationBean<>(filter);
+//        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//        return registration;
+//    }
 
 }
